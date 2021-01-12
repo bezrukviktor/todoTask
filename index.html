@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="src/css/style.css">
+    <script src="https://kit.fontawesome.com/1b546e268c.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <section class="todo-container">
+        <header class="todo-header">
+          <h1 class="todo-header__title">todos</h1>
+          <input type="text" placeholder="What needs to be done?" class="todo-header__input">
+        </header>
+        <main class="main">
+          <input type="checkbox" class="checkAll">
+          <ul class="todo-list"></ul>
+        </main>
+        <footer class="footer">
+          <span class="counter"></span>
+          <div class="filter">
+            <ul class="filter-list">
+              <li><a href="#" class="filter-link filter-link--active filter-all">All</a></li>
+              <li><a href="#active" class="filter-link filter-active">Active</a></li>
+              <li><a href="#completed" class="filter-link filter-completed">Completed</a></li>
+            </ul>
+          </div>
+        </footer>
+      </section>
+    <script src="src/script.js"></script>
+</body>
+
+</html>
