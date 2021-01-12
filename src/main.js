@@ -7,11 +7,13 @@ class Todos {
     this.counter = document.querySelector('.counter');
     this.footer = document.querySelector('.footer');
     this.checkAll = document.querySelector('.checkAll');
+    this.select = false;
     this.todo = [];
     this.id = 0;
 
     this.setup();
     this.hideFooter();
+    this.checkAll.addEventListener('change', () => this.selectAll());
   }
 
   setup() {
@@ -19,8 +21,8 @@ class Todos {
       if (e.keyCode === 13 && e.target.value !== '' && e.target.value.trim() !== '') {
         this.addTodo(e.target.value);
         this.input.value = '';
+        this.render();
       }
-      this.render();
     });
   }
 
@@ -78,23 +80,37 @@ class Todos {
     });
 
     this.countItems();
+    this.hideFooter();
   }
 
   countItems() {
     const activeItemCount = this.todo.filter((item) => item.active).length;
     this.counter.textContent = activeItemCount === 1 ? `${activeItemCount} item left` : `${activeItemCount} items left`;
-    this.hideFooter();
   }
 
   hideFooter() {
     const itemCount = this.todo.filter((item) => item).length;
     if (!itemCount) {
       this.footer.style.display = 'none';
-      this.checkAll.style.visibility = 'hidden';
+      this.checkAll.style.display = 'none';
     } else {
       this.footer.style.display = 'flex';
-      this.checkAll.style.visibility = 'visible';
+      this.checkAll.style.display = 'block';
     }
+  }
+
+  selectAll() {
+    this.select = !this.select;
+    if (this.select) {
+      this.todo.forEach((item) => {
+        item.active = false;
+      });
+    } else {
+      this.todo.forEach((item) => {
+        item.active = true;
+      });
+    }
+    this.render();
   }
 
 }
