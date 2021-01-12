@@ -25,7 +25,7 @@ class Todos {
       if (e.keyCode === 13 && e.target.value.trim() !== '') {
         this.addTodo(e.target.value);
         this.input.value = '';
-        this.checkHash();
+        this.defineMode();
       }
     });
 
@@ -36,7 +36,7 @@ class Todos {
         this.filterLinks.forEach((link) => link.classList.remove('filter-link--active'));
         link.classList.add('filter-link--active');
         this.hash = e.target.hash.slice(1);
-        this.checkHash();
+        this.defineMode();
       });
     });
   }
@@ -61,10 +61,10 @@ class Todos {
         item.active = true;
       });
     }
-    this.checkHash();
+    this.defineMode();
   }
 
-  checkHash() {
+  defineMode() {
     switch (this.hash) {
       case activeTask:
         const activeTodos = this.todo.filter((item) => item.active);
@@ -81,7 +81,7 @@ class Todos {
   }
 
   generateId() {
-    return this.id++; //uuid
+    return new Date().valueOf();
   }
 
   renderBody(todoArr) {
@@ -129,7 +129,7 @@ class Todos {
 
   removeTask(id) {
     this.todo = this.todo.filter((todoObj) => todoObj.id !== parseInt(id));
-    this.checkHash();
+    this.defineMode();
   }
 
   toggleCheckbox(id) {
@@ -139,7 +139,7 @@ class Todos {
       }
       return todoObj;
     });
-    this.checkHash();
+    this.defineMode();
   }
 
   makeLabelEditable(e) {
@@ -160,7 +160,7 @@ class Todos {
       return todoObj.task !== '';
     });
     label.contentEditable = false;
-    this.checkHash();
+    this.defineMode();
   }
 
   renderFooter() {
@@ -186,4 +186,4 @@ class Todos {
   }
 }
 
-const todolist = new Todos(document.querySelector('.todo-list'), [])
+const todolist = new Todos(document.querySelector('.todo-list'), []);

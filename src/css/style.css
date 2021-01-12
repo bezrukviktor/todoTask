@@ -121,6 +121,7 @@ ul, li {
 }
 
 .checkAll {
+  display: none;
   position: absolute;
   top: -44px;
   left: 17px;
