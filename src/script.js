@@ -5,17 +5,17 @@ const activeTask = 'active',
 
 class Todos {
   constructor(domNode, list) {
-    this.input = document.querySelector('.todo-header__input');
-    this.counter = document.querySelector('.counter');
-    this.footer = document.querySelector('.footer');
-    this.checkAll = document.querySelector('.checkAll');
-    this.filterList = document.querySelector('.filter-list');
-    this.filterLinks = Array.from(this.filterList.querySelectorAll('a'));
+    this.input = document.querySelector('.todo-body__input');
+    this.checkAll = document.querySelector('#checkAll');
+    this.checkAllLabel = document.querySelector('.checkAllLabel');
+    this.footer = document.querySelector('.todo-footer');
+    this.counter = document.querySelector('.todo-footer__counter');
+    this.filterLinks = Array.from(document.querySelectorAll('.todo-filter__link'));
+    this.clearCompletedBtn = document.querySelector('.todo-clear-completed');
     this.ul = domNode;
     this.hash = null;
     this.selectAll = false;
-    this.todo = [...list];
-    this.id = 0;
+    this.todoList  = [...list];
 
     this.init();
   }
@@ -29,15 +29,22 @@ class Todos {
       }
     });
 
-    this.checkAll.addEventListener('change', () => this.toggleAllCheckbox());
+    this.checkAllLabel.addEventListener('click', (e) => this.toggleAllCheckboxes(e));
 
     this.filterLinks.forEach((link) => {
       link.addEventListener('click', (e) => {
-        this.filterLinks.forEach((link) => link.classList.remove('filter-link--active'));
-        link.classList.add('filter-link--active');
+        this.filterLinks.forEach((link) => link.classList.remove('todo-filter__link--active'));
+        link.classList.add('todo-filter__link--active');
         this.hash = e.target.hash.slice(1);
         this.defineMode();
       });
+    });
+
+    this.clearCompletedBtn.addEventListener('click', (e) => {
+      this.todoList  = this.todoList .filter((todoObj) => {
+        return todoObj.active;       
+      });
+      this.defineMode();
     });
   }
 
@@ -47,17 +54,20 @@ class Todos {
       active: true,
       id: this.generateId()
     }
-    this.todo.push(this.todoObj);
+    this.todoList .push(this.todoObj);
   }
 
-  toggleAllCheckbox() {
+  toggleAllCheckboxes(e) {
+    e.preventDefault();
     this.selectAll = !this.selectAll;
     if (this.selectAll) {
-      this.todo.forEach((item) => {
+      this.todoList .forEach((item) => {
+        this.checkAll.checked = true;
         item.active = false;
       });
     } else {
-      this.todo.forEach((item) => {
+      this.todoList .forEach((item) => {
+        this.checkAll.checked = false;
         item.active = true;
       });
     }
@@ -67,15 +77,15 @@ class Todos {
   defineMode() {
     switch (this.hash) {
       case activeTask:
-        const activeTodos = this.todo.filter((item) => item.active);
+        const activeTodos = this.todoList .filter((item) => item.active);
         this.render(activeTodos);
         break;
       case completedTask:
-        const completedTodos = this.todo.filter((item) => !item.active);
+        const completedTodos = this.todoList .filter((item) => !item.active);
         this.render(completedTodos);
         break;
       default:
-        this.render(this.todo);
+        this.render(this.todoList );
         break;
     }
   }
@@ -92,27 +102,30 @@ class Todos {
         isActiveTask = todoObj.active,
         li = document.createElement('li'),
         taskCheckbox = document.createElement('input'),
+        labelForCheckbox = document.createElement('label'),
         taskLabel = document.createElement('label'),
-        closeIcon = document.createElement('i');
+        closeIcon = document.createElement('button');
 
       li.classList.add('todo-item');
       li.setAttribute('data-id', taskId);
 
       taskCheckbox.classList.add('todo-checkbox');
+      taskCheckbox.setAttribute('id', taskId);
       taskCheckbox.setAttribute('type', 'checkbox');
       taskCheckbox.setAttribute('data-id', taskId);
       taskCheckbox.checked = !isActiveTask;
 
+      labelForCheckbox.setAttribute('for', taskId);
+
       const taskState = isActiveTask ? activeTask : completedTask;
-      taskLabel.classList.add(taskState);
+      taskLabel.classList.add('todo-label', taskState);
       taskLabel.setAttribute('data-id', taskId);
       taskLabel.textContent = taskName;
 
-      closeIcon.classList.add('fa', 'fa-times');
-      closeIcon.setAttribute('aria-hidden', 'true');
+      closeIcon.classList.add('remove');
       closeIcon.setAttribute('data-id', taskId);
 
-      li.append(taskCheckbox, taskLabel, closeIcon);
+      li.append(taskCheckbox, labelForCheckbox, taskLabel, closeIcon);
       this.ul.append(li);
 
       closeIcon.addEventListener('click', (e) => this.removeTask(e.target.dataset.id));
@@ -124,16 +137,28 @@ class Todos {
           this.makeLabelUneditable(taskLabel);
         }
       });
+      this.selectAllListener();
     });
   }
 
+  selectAllListener() {
+    const isAllSelected = this.todoList .every((todoObj) => !todoObj.active);
+    if (isAllSelected) {
+      this.selectAll = true;
+      this.checkAll.checked = true;
+    } else {
+      this.selectAll = false;
+      this.checkAll.checked = false;
+    }
+  }
+
   removeTask(id) {
-    this.todo = this.todo.filter((todoObj) => todoObj.id !== parseInt(id));
+    this.todoList  = this.todoList .filter((todoObj) => todoObj.id !== parseInt(id));
     this.defineMode();
   }
 
   toggleCheckbox(id) {
-    this.todo = this.todo.map((todoObj) => {
+    this.todoList  = this.todoList .map((todoObj) => {
       if (todoObj.id === parseInt(id)) {
         todoObj.active = !todoObj.active;
       }
@@ -151,7 +176,7 @@ class Todos {
   makeLabelUneditable(label) {
     const newLabelContent = label.textContent.trim();
     const labelId = parseInt(label.dataset.id);
-    this.todo = this.todo.map((item) => {
+    this.todoList  = this.todoList .map((item) => {
       if (labelId === item.id) {
         item.task = newLabelContent;
       }
@@ -165,19 +190,28 @@ class Todos {
 
   renderFooter() {
     this.countItems();
-    const itemCount = this.todo.filter((item) => item).length;
+    this.showClearBtn();
+    const itemCount = this.todoList .filter((item) => item).length;
     if (!itemCount) {
       this.footer.style.display = 'none';
-      this.checkAll.style.display = 'none';
+      this.checkAllLabel.style.visibility = 'hidden';
+      this.checkAll.checked = false;
     } else {
       this.footer.style.display = 'flex';
-      this.checkAll.style.display = 'block';
+      this.checkAllLabel.style.visibility = 'visible';
     }
   }
 
   countItems() {
-    const activeItemCount = this.todo.filter((item) => item.active).length;
+    const activeItemCount = this.todoList .filter((item) => item.active).length;
     this.counter.textContent = activeItemCount === 1 ? `${activeItemCount} item left` : `${activeItemCount} items left`;
+  }
+
+  showClearBtn() {
+    const isCompletedTask = this.todoList .some((todoObj) => {
+      return !todoObj.active;
+    })
+    isCompletedTask ? this.clearCompletedBtn.style.visibility = 'visible' : this.clearCompletedBtn.style.visibility = 'hidden';
   }
 
   render(todoArr) {
