@@ -1,25 +1,33 @@
-import logo from './logo.svg';
+import { Component } from 'react';
 import './App.css';
+import MainInput from './components/mainInput';
+import TodoBody from './components/todoBody';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  state = {
+    todoList: [],
+  }
+
+  handleSubmit = (todoData) => {
+    this.setState({todoList: [...this.state.todoList, todoData]});
+  }
+
+  render () {
+    const {todoList} = this.state;
+    return (
+      <div className="App">
+        <header className="header">
+          <h1 className="header__title">todos</h1>
+        </header>
+        <main className="main">
+          <section className="todo-container">
+            <MainInput handleSubmit={this.handleSubmit} />
+            <TodoBody todoData={todoList} />
+          </section>
+        </main>
+      </div>
+    );
+  }
 }
 
 export default App;
