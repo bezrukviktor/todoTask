@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
-  <link rel="stylesheet" href="./src/css/style.css">
+  <link rel="stylesheet" href="./css/style.css">
   <script src="https://kit.fontawesome.com/1b546e268c.js" crossorigin="anonymous"></script>
 </head>
 
@@ -15,10 +15,12 @@
   </header>
   <main class="main">
     <section class="todo-container">
-      <div class="todo-body">
-        <input type="text" placeholder="What needs to be done?" class="todo-body__input">
+      <div class="todo-header">
+        <input type="text" placeholder="What needs to be done?" class="todo-header__input">
         <input type="checkbox" id="checkAll" class="checkAll">
         <label class="checkAllLabel" for="checkAll"></label>
+      </div>
+      <div class="todo-body">
         <ul class="todo-list"></ul>
       </div>
       <div class="todo-footer">
@@ -37,7 +39,7 @@
   <footer class="footer">
 
   </footer>
-  <script src="src/script.js"></script>
+  <script src="script.js"></script>
 </body>
 
 </html>

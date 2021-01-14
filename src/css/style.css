@@ -74,7 +74,12 @@ button {
   width: 100%;
 }
 
-.todo-body__input {
+.todo-header {
+  position: relative;
+  width: 100%;
+}
+
+.todo-header__input {
   width: 100%;
   padding: 16px 16px 16px 60px;
   border: none;
@@ -84,31 +89,31 @@ button {
           box-shadow: inset 0 -2px 1px rgba(0, 0, 0, 0.03);
 }
 
-.todo-body__input::-webkit-input-placeholder {
+.todo-header__input::-webkit-input-placeholder {
   font-style: italic;
   font-size: 22px;
   color: #cccccc;
 }
 
-.todo-body__input:-ms-input-placeholder {
+.todo-header__input:-ms-input-placeholder {
   font-style: italic;
   font-size: 22px;
   color: #cccccc;
 }
 
-.todo-body__input::-ms-input-placeholder {
+.todo-header__input::-ms-input-placeholder {
   font-style: italic;
   font-size: 22px;
   color: #cccccc;
 }
 
-.todo-body__input::placeholder {
+.todo-header__input::placeholder {
   font-style: italic;
   font-size: 22px;
   color: #cccccc;
 }
 
-.todo-body__input:focus {
+.todo-header__input:focus {
   outline: none;
 }
 

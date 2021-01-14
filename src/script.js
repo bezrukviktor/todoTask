@@ -7,7 +7,7 @@ const taskStatus = {
 
 class Todos {
   constructor(domNode, list) {
-    this.input = document.querySelector('.todo-body__input');
+    this.input = document.querySelector('.todo-header__input');
     this.checkAll = document.querySelector('#checkAll');
     this.checkAllLabel = document.querySelector('.checkAllLabel');
     this.footer = document.querySelector('.todo-footer');
