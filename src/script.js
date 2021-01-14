@@ -1,7 +1,9 @@
 'use strict'
 
-const activeTask = 'active',
-  completedTask = 'completed';
+const taskStatus = {
+  activeTask: 'active',
+  completedTask: 'completed'
+}
 
 class Todos {
   constructor(domNode, list) {
@@ -76,11 +78,11 @@ class Todos {
 
   defineMode() {
     switch (this.hash) {
-      case activeTask:
+      case taskStatus.activeTask:
         const activeTodos = this.todoList .filter((item) => item.active);
         this.render(activeTodos);
         break;
-      case completedTask:
+      case taskStatus.completedTask:
         const completedTodos = this.todoList .filter((item) => !item.active);
         this.render(completedTodos);
         break;
@@ -117,7 +119,7 @@ class Todos {
 
       labelForCheckbox.setAttribute('for', taskId);
 
-      const taskState = isActiveTask ? activeTask : completedTask;
+      const taskState = isActiveTask ? taskStatus.activeTask : taskStatus.completedTask;
       taskLabel.classList.add('todo-label', taskState);
       taskLabel.setAttribute('data-id', taskId);
       taskLabel.textContent = taskName;
@@ -189,7 +191,7 @@ class Todos {
   }
 
   renderFooter() {
-    this.countItems();
+    this.countActiveTasks();
     this.showClearBtn();
     const itemCount = this.todoList .filter((item) => item).length;
     if (!itemCount) {
@@ -202,7 +204,7 @@ class Todos {
     }
   }
 
-  countItems() {
+  countActiveTasks() {
     const activeItemCount = this.todoList .filter((item) => item.active).length;
     this.counter.textContent = activeItemCount === 1 ? `${activeItemCount} item left` : `${activeItemCount} items left`;
   }
