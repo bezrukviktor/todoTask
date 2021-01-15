@@ -11,13 +11,19 @@ export default class MainInput extends Component {
   state = this.initialState;
 
   handleChange = (e) => {
-    this.setState({
-      [e.target.name]: e.target.value
-    })
+    const value = e.target.value,
+    name = e.target.name;
+
+    if (value.length > 0 && value.trim().length > 0) {
+      this.setState({
+        [name]: value
+      })
+    }
   }
 
   handleSubmit = (e) => {
-    if (e.key === 'Enter') {
+    const value = e.target.value;
+    if (e.key === 'Enter' && value.length > 0) {
       this.setState({
         id: this.generateId()
       })
@@ -39,6 +45,7 @@ export default class MainInput extends Component {
           type="text"
           name="task"
           placeholder="What needs to be done?"
+          autoComplete="off"
           className="todo-body__input"
           value={task}
           onChange={this.handleChange}
@@ -46,8 +53,14 @@ export default class MainInput extends Component {
         <input
           type="checkbox"
           id="checkAll"
-          className="checkAll" />
-        <label className="checkAllLabel" htmlFor="checkAll"></label>
+          checked={this.props.getCompletedItems()}
+          className="checkAll"
+          onChange={(e) => this.props.toggleAllCheckboxes(e)} />
+        <label 
+          className="checkAllLabel" 
+          htmlFor="checkAll" 
+          style={{display: this.props.countAllItems()}}
+        ></label>
       </div>
     )
   }
