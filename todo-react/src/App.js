@@ -1,128 +1,109 @@
-import { Component } from 'react';
-import './App.css';
-import MainInput from './components/mainInput';
-import TodoBody from './components/todoBody';
-import TodoFooter from './components/todoFooter';
+import { useCallback, useState } from 'react'
+import './App.css'
+import MainInput from './components/MainInput'
+import TodoBody from './components/TodoBody'
+import TodoFooter from './components/TodoFooter'
+import todoStates from './constants/constants'
 
-class App extends Component {
-  state = {
-    todoList: [],
-  }
+const App = () => {
+  const [todoList, setTodoList] = useState([])
+  const [mode, setMode] = useState(todoStates.all);
 
-  handleSubmit = (todoData) => {
-    this.setState({ todoList: [...this.state.todoList, todoData] });
-  }
+  const handleListSubmit = useCallback((newTask) => {
+    setTodoList([...todoList, newTask]);
+  }, [todoList]);
 
-  countAllItems = () => {
-    return this.state.todoList.length > 0 ? 'flex' : 'none';
-  }
+  const handleSubmitMode = useCallback((mode) => {
+    setMode(mode);
+  }, []);
 
-  removeItem = (id) => {
-    const { todoList } = this.state;
-    this.setState({
-      todoList: todoList.filter((item) => {
-        return item.id !== parseInt(id);
-      })
-    });
-  }
+  const toggleAllCheckboxes = useCallback((e) => {
+    setTodoList(todoList => todoList.map(item => {
+      return {
+        ...item,
+        isActive: !e.target.checked
+      }
+    }))
+  }, []);
 
-  removeCompletedItems = () => {
-    const { todoList } = this.state;
-    this.setState({
-      todoList: todoList.filter((item) => item.isActive)
-    })
-  }
-
-  toggleCheckbox = (e) => {
-    const id = e.target.dataset.id;
-    const { todoList } = this.state;
-    this.setState({
-      todoList: todoList.map((item) => {
-        if (item.id === parseInt(id)) {
-          item.isActive = !item.isActive
+  const toggleCheckbox = useCallback((id) => {
+    setTodoList(todoList => todoList.map((item) => {
+      if (item.id === id) {
+        return {
+          ...item,
+          isActive: !item.isActive,
         }
-        return item;
-      })
-    })
-  }
+      }
+      return item;
+    }))
+  }, []);
 
-  toggleAllCheckboxes = (e) => {
-    const { todoList } = this.state;
-    const isChecked = e.target.checked;
-    this.setState({
-      todoList: todoList.map((item) => {
-        isChecked ? item.isActive = false : item.isActive = true;
-        return item;
-      })
-    })
-  }
+  const removeItem = useCallback((id) => {
+    setTodoList(todoList => todoList.filter((item) => item.id !== id));
+  }, []) 
 
-  getCompletedItems = () => {
-    const { todoList } = this.state;
-    return todoList.every((item) => item.isActive === false);
-  }
-
-  editTask = (e) => {
-    const label = e.target;
+  const editTask = useCallback((label) => {
     label.contentEditable = true;
     label.focus();
-  }
+  }, []);
 
-  checkKey = (e) => {
-    if (e.key === 'Enter') {
-      this.editTaskSubmit(e);
-    }
-  }
+  const editTaskSubmit = useCallback((e, labelId) => {
+    const label = e.target;
+    const newLabelContent = label.textContent.trim();
 
-  editTaskSubmit = (e) => {
-    const label = e.target,
-      newLabelContent = label.textContent.trim(),
-      labelId = parseInt(e.target.dataset.id),
-      { todoList } = this.state;
-
-    this.setState({
-      todoList: todoList.map((item) => {
-        if (item.id === labelId) {
-          item.task = newLabelContent;
+    setTodoList(todoList => todoList.map((item) => {
+      if (item.id === labelId) {
+        return {
+          ...item,
+          task: newLabelContent
         }
-        return item;
-      }).filter((item) => {
-        return item.task !== '';
-      })
-    });
+      }
+      return item;
+    }).filter((item) => item.task !== ''));
     label.contentEditable = false;
-  }
+  }, []);
 
-  render() {
-    const { todoList } = this.state;
-    return (
-      <div className="App">
-        <header className="header">
-          <h1 className="header__title">todos</h1>
-        </header>
-        <main className="main">
-          <section className="todo-container">
-            <MainInput
-              handleSubmit={this.handleSubmit}
-              countAllItems={this.countAllItems}
-              toggleAllCheckboxes={this.toggleAllCheckboxes}
-              getCompletedItems={this.getCompletedItems} />
-            <TodoBody
-              todoData={todoList}
-              removeItem={this.removeItem}
-              toggleCheckbox={this.toggleCheckbox}
-              editTask={this.editTask}
-              editTaskSubmit={this.editTaskSubmit}
-              checkKey={this.checkKey} />
+  const checkKey = useCallback((e, labelId) => {
+    if (e.key === 'Enter') {
+      editTaskSubmit(e, labelId);
+    }
+  }, [editTaskSubmit]);
+
+  const removeCompletedItems = useCallback(() => {
+    setTodoList(todoList => todoList.filter((item) => item.isActive));
+  }, []);
+
+  return (
+    <div className="App">
+      <header className="header">
+        <h1 className="header__title">todos</h1>
+      </header>
+      <main className="main">
+        <section className="todo-container">
+          <MainInput
+            todoData={todoList}
+            handleListSubmit={handleListSubmit}
+            toggleAllCheckboxes={toggleAllCheckboxes}
+          />
+          <TodoBody
+            todoData={todoList}
+            mode={mode}
+            removeItem={removeItem}
+            toggleCheckbox={toggleCheckbox}
+            editTask={editTask}
+            editTaskSubmit={editTaskSubmit}
+            checkKey={checkKey} />
+          {!!todoList.length ?
             <TodoFooter
               todoData={todoList}
-              countAllItems={this.countAllItems}
-              removeCompletedItems={this.removeCompletedItems} />
-          </section>
-        </main>
-      </div>
-    );
-  }
+              currentMode={mode}
+              handleSubmitMode={handleSubmitMode}
+              removeCompletedItems={removeCompletedItems} /> : null
+          }
+        </section>
+      </main>
+    </div>
+  );
 }
 
 export default App;
