@@ -1,33 +1,44 @@
-import React, {useCallback, useMemo} from 'react'
-import todoStates from '../constants/constants'
+import React, { useCallback, useMemo } from 'react'
+import { useSelector, useDispatch } from 'react-redux';
+import { todoStates } from '../constants/constants'
+import { toggleMode, removeCompletedTodos } from '../actions'
+import { getTodolist, getTodoMode } from '../selectors/todos';
 
-const TodoFooter = ({ removeCompletedItems, todoData, currentMode, handleSubmitMode}) => {
+const TodoFooter = () => {
+  const dispatch = useDispatch()
+  const mode = useSelector(getTodoMode)
+  const todoList = useSelector(getTodolist)
 
-  const todoCounter = useCallback(() => {
-    const activeItemCount = todoData.filter((item) => item.isActive).length;
+  const itemsCount = useMemo(() => {
+    const activeItemCount = todoList.filter((item) => item.isActive).length;
     const itemWord = activeItemCount === 1 ? 'item' : 'items';
     return `${activeItemCount} ${itemWord} left`;
-  }, [todoData]);
+  }, [todoList]);
 
-  const changeMode = useCallback((e) => handleSubmitMode(e.target.textContent), [handleSubmitMode]);
-  const showClearBtn = useCallback(() => todoData.some((item) => !item.isActive), [todoData]);
+  const changeMode = useCallback((e) => {
+    const currentMode = e.target.textContent;
+    dispatch(toggleMode(currentMode))
+  }, [dispatch]);
 
-  const createTodoModeItems = useCallback(() => {
-    return Object.values(todoStates).map((mode) => {
+  const filterItems = useMemo(() => {
+    return Object.values(todoStates).map((status) => {
       return <li
-          key={mode}
-          className={`todo-filter__mode 
-          ${currentMode === mode ? 'todo-filter__mode--active' : ''}`}
-          onClick={(e) => changeMode(e)}>{mode}
-        </li>
+        key={status}
+        className={`todo-filter__mode 
+          ${mode === status ? 'todo-filter__mode--active' : ''}`}
+        onClick={changeMode}>
+        {status}
+      </li>
     })
-  }, [currentMode, changeMode]);
+  }, [changeMode, mode]);
 
-  const itemsCount = useMemo(() => todoCounter(), [todoCounter]);
-  const filterItems = useMemo(() => createTodoModeItems(), [createTodoModeItems]);
-  const clearCompleted = useMemo(() => showClearBtn(), [showClearBtn]);
-  const classNames = `todo-clear-completed ${clearCompleted ? 'todo-clear-completed--show' : ''}`;
-  
+  const removeCompletedItems = useCallback(() => {
+    dispatch(removeCompletedTodos())
+  }, [dispatch])
+
+  const showClearBtn = useMemo(() => todoList.some((item) => !item.isActive), [todoList]);
+  const classNames = `todo-clear-completed ${showClearBtn ? 'todo-clear-completed--show' : ''}`;
+
   return (
     <div className="todo-footer">
       <span className="todo-footer__counter">{itemsCount}</span>
@@ -38,8 +49,8 @@ const TodoFooter = ({ removeCompletedItems, todoData, currentMode, handleSubmitM
       </div>
       <span
         className={classNames}
-        onClick={removeCompletedItems}>Clear completed
-      </span>
+        onClick={removeCompletedItems}>
+        Clear completed</span>
     </div>
   )
 }

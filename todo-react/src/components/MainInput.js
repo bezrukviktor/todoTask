@@ -1,27 +1,31 @@
 import React, { useMemo, useCallback, useRef } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { addTodo, toggleAllTodos } from '../actions'
+import { getTodolist } from '../selectors/todos';
 
-const MainInput = ({ toggleAllCheckboxes, handleListSubmit, todoData }) => {
-
+const MainInput = () => {
+  const dispatch = useDispatch()
+  const todoList = useSelector(getTodolist)
   const inputRef = useRef();
 
   const handleSubmit = useCallback((e) => {
     const value = inputRef.current.value;
-    const newTask = {
-      task: value,
-      isActive: true,
-      id: new Date().valueOf()
-    }
+    const id = new Date().valueOf();
     if (e.key === 'Enter' && value.length) {
-      handleListSubmit(newTask);
+      dispatch(addTodo(value, id));
       inputRef.current.value = '';
     }
-  }, [handleListSubmit])
+  }, [dispatch])
 
-  const isAllCompleted = useCallback(() => todoData.every((item) => !item.isActive), [todoData])
+  const isAllCompleted = useCallback(() => todoList.every((item) => !item.isActive), [todoList])
 
   const isChecked = useMemo(() => {
     return isAllCompleted()
   }, [isAllCompleted])
+
+  const onSelect = useCallback((e) => {
+    dispatch(toggleAllTodos(!e.target.checked));
+  }, [dispatch])
 
   return (
     <div className="todo-body">
@@ -37,12 +41,13 @@ const MainInput = ({ toggleAllCheckboxes, handleListSubmit, todoData }) => {
         id="checkAll"
         className="checkAll"
         checked={isChecked}
-        onChange={toggleAllCheckboxes} />
-      {!!todoData.length ?
+        onChange={onSelect}
+      />
+      {!!todoList.length ?
         <label
           className="checkAllLabel"
           htmlFor="checkAll"
-        ></label> : null
+        /> : null
       }
     </div>
   )
