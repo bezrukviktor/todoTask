@@ -1,7 +1,8 @@
 import React, { useCallback, useMemo } from 'react'
 import { todoStates } from '../constants/constants'
-import { toggleTodo, removeTodo, editTodo } from '../actions'
-import { useDispatch } from 'react-redux';
+import { setTodos } from '../actions'
+import { useDispatch } from 'react-redux'
+import { removeItem, toggleItem, editItem } from '../service/todoService'
 
 const TodoListItem = ({ item }) => {
   const dispatch = useDispatch()
@@ -9,26 +10,64 @@ const TodoListItem = ({ item }) => {
   const isActiveItem = useMemo(() => {
     return item.isActive ? todoStates.active.toLowerCase() : todoStates.completed.toLowerCase();
   }, [item.isActive])
-  
+
   const labelClassName = `todo-label ${isActiveItem}`
-  const onToggleCheckbox = useCallback(() => dispatch(toggleTodo(item.id)), [dispatch, item.id])
-  const onRemoveItem = useCallback(() => dispatch(removeTodo(item.id)), [dispatch, item.id])
+
+  const onToggleItem = useCallback(() => {
+    const id = { id: item.id };
+    (async () => {
+      try {
+        const data = await toggleItem(id);
+        dispatch(setTodos(data.list));
+      } catch (err) {
+        console.log(err);
+      }
+    })()
+  }, [dispatch, item.id])
+
+  const onRemoveItem = useCallback(() => {
+    const id = { id: item.id };
+    (async () => {
+      try {
+        const data = await removeItem(id);
+        dispatch(setTodos(data.list))
+      } catch (err) {
+        console.log(err);
+      }
+    })()
+  }, [dispatch, item.id])
+
   const onEditTask = useCallback((e) => {
     const label = e.target;
     label.contentEditable = true;
     label.focus();
   }, [])
+
   const submitEditableTodo = useCallback((e) => {
     const label = e.target;
-    dispatch(editTodo(item.id, e.target.textContent))
+    const id = item.id;
+    const task = e.target.textContent;
+    const editableData = {
+      id,
+      task
+    };
+    (async () => {
+      try {
+        const data = await editItem(editableData);
+        dispatch(setTodos(data.list))
+      } catch(err) {
+        console.log(err);
+      }
+    })()
     label.contentEditable = false;
   }, [dispatch, item.id])
+
   const onPressEnter = useCallback((e) => {
     if (e.key === 'Enter') {
-      submitEditableTodo(e);
+      e.target.blur();
     }
-  }, [submitEditableTodo])
-  
+  }, [])
+
   return (
     <li className="todo-item" key={item.id}>
       <input
@@ -36,7 +75,7 @@ const TodoListItem = ({ item }) => {
         className="todo-checkbox"
         id={item.id}
         checked={!item.isActive}
-        onChange={onToggleCheckbox}
+        onChange={onToggleItem}
       />
       <label htmlFor={item.id} />
       <label

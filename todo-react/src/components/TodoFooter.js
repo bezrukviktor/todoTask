@@ -1,8 +1,9 @@
 import React, { useCallback, useMemo } from 'react'
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux'
 import { todoStates } from '../constants/constants'
-import { toggleMode, removeCompletedTodos } from '../actions'
-import { getTodolist, getTodoMode } from '../selectors/todos';
+import { setTodos, toggleMode } from '../actions'
+import { getTodolist, getTodoMode } from '../selectors/todos'
+import { removeCompletedItems } from '../service/todoService'
 
 const TodoFooter = () => {
   const dispatch = useDispatch()
@@ -32,8 +33,15 @@ const TodoFooter = () => {
     })
   }, [changeMode, mode]);
 
-  const removeCompletedItems = useCallback(() => {
-    dispatch(removeCompletedTodos())
+  const onRemoveCompletedItems = useCallback(() => {
+    (async () => {
+      try {
+        const data = await removeCompletedItems();
+        dispatch(setTodos(data.list))
+      } catch(err) {
+        console.log(err);
+      }
+    })()
   }, [dispatch])
 
   const showClearBtn = useMemo(() => todoList.some((item) => !item.isActive), [todoList]);
@@ -49,7 +57,7 @@ const TodoFooter = () => {
       </div>
       <span
         className={classNames}
-        onClick={removeCompletedItems}>
+        onClick={onRemoveCompletedItems}>
         Clear completed</span>
     </div>
   )
