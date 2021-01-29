@@ -14,7 +14,7 @@ const TodoListItem = ({ item }) => {
   const labelClassName = `todo-label ${isActiveItem}`
 
   const onToggleItem = useCallback(() => {
-    const id = { id: item.id };
+    const id = { id: item._id };
     (async () => {
       try {
         const data = await toggleItem(id);
@@ -23,10 +23,10 @@ const TodoListItem = ({ item }) => {
         console.log(err);
       }
     })()
-  }, [dispatch, item.id])
+  }, [dispatch, item._id])
 
   const onRemoveItem = useCallback(() => {
-    const id = { id: item.id };
+    const id = { id: item._id };
     (async () => {
       try {
         const data = await removeItem(id);
@@ -35,7 +35,7 @@ const TodoListItem = ({ item }) => {
         console.log(err);
       }
     })()
-  }, [dispatch, item.id])
+  }, [dispatch, item._id])
 
   const onEditTask = useCallback((e) => {
     const label = e.target;
@@ -45,7 +45,7 @@ const TodoListItem = ({ item }) => {
 
   const submitEditableTodo = useCallback((e) => {
     const label = e.target;
-    const id = item.id;
+    const id = item._id;
     const task = e.target.textContent;
     const editableData = {
       id,
@@ -60,7 +60,7 @@ const TodoListItem = ({ item }) => {
       }
     })()
     label.contentEditable = false;
-  }, [dispatch, item.id])
+  }, [dispatch, item._id])
 
   const onPressEnter = useCallback((e) => {
     if (e.key === 'Enter') {
@@ -69,15 +69,15 @@ const TodoListItem = ({ item }) => {
   }, [])
 
   return (
-    <li className="todo-item" key={item.id}>
+    <li className="todo-item" key={item._id}>
       <input
         type="checkbox"
         className="todo-checkbox"
-        id={item.id}
+        id={item._id}
         checked={!item.isActive}
         onChange={onToggleItem}
       />
-      <label htmlFor={item.id} />
+      <label htmlFor={item._id} />
       <label
         className={labelClassName}
         onDoubleClick={onEditTask}

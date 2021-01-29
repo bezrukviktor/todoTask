@@ -26,7 +26,7 @@ const TodoBody = () => {
     <ul className="todo-list">
       {todosArr.map((item) =>
         <TodoListItem
-          key={item.id}
+          key={item._id}
           item={item} />
       )}
     </ul>
