@@ -6,7 +6,9 @@ import {
 
 const initialState = {
   todoList: [],
-  mode: todoStates.all
+  mode: todoStates.all,
+  error: false,
+  loading: false
 }
 
 const todoReducer = (state = initialState, action) => {

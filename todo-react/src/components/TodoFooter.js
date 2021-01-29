@@ -1,9 +1,8 @@
 import React, { useCallback, useMemo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { todoStates } from '../constants/constants'
-import { setTodos, toggleMode } from '../actions'
+import { toggleMode, fetchRemoveItems } from '../actions'
 import { getTodolist, getTodoMode } from '../selectors/todos'
-import { removeCompletedItems } from '../service/todoService'
 
 const TodoFooter = () => {
   const dispatch = useDispatch()
@@ -34,14 +33,7 @@ const TodoFooter = () => {
   }, [changeMode, mode]);
 
   const onRemoveCompletedItems = useCallback(() => {
-    (async () => {
-      try {
-        const data = await removeCompletedItems();
-        dispatch(setTodos(data.list))
-      } catch(err) {
-        console.log(err);
-      }
-    })()
+    dispatch(fetchRemoveItems())
   }, [dispatch])
 
   const showClearBtn = useMemo(() => todoList.some((item) => !item.isActive), [todoList]);

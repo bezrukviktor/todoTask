@@ -1,8 +1,7 @@
 import React, { useCallback, useMemo } from 'react'
 import { todoStates } from '../constants/constants'
-import { setTodos } from '../actions'
+import { fetchToggleItem, fetchRemoveItem, fetchEditItem } from '../actions'
 import { useDispatch } from 'react-redux'
-import { removeItem, toggleItem, editItem } from '../service/todoService'
 
 const TodoListItem = ({ item }) => {
   const dispatch = useDispatch()
@@ -15,26 +14,12 @@ const TodoListItem = ({ item }) => {
 
   const onToggleItem = useCallback(() => {
     const id = { id: item._id };
-    (async () => {
-      try {
-        const data = await toggleItem(id);
-        dispatch(setTodos(data.list));
-      } catch (err) {
-        console.log(err);
-      }
-    })()
+    dispatch(fetchToggleItem(id))
   }, [dispatch, item._id])
 
   const onRemoveItem = useCallback(() => {
     const id = { id: item._id };
-    (async () => {
-      try {
-        const data = await removeItem(id);
-        dispatch(setTodos(data.list))
-      } catch (err) {
-        console.log(err);
-      }
-    })()
+    dispatch(fetchRemoveItem(id))
   }, [dispatch, item._id])
 
   const onEditTask = useCallback((e) => {
@@ -51,14 +36,7 @@ const TodoListItem = ({ item }) => {
       id,
       task
     };
-    (async () => {
-      try {
-        const data = await editItem(editableData);
-        dispatch(setTodos(data.list))
-      } catch(err) {
-        console.log(err);
-      }
-    })()
+    dispatch(fetchEditItem(editableData))
     label.contentEditable = false;
   }, [dispatch, item._id])
 

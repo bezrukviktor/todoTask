@@ -1,8 +1,7 @@
 import React, { useMemo, useCallback, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { setTodos } from '../actions'
+import { fetchAddItem, fetchIsActive } from '../actions'
 import { getTodolist } from '../selectors/todos'
-import { addItem, toggleAllItems } from '../service/todoService'
 
 const MainInput = () => {
   const dispatch = useDispatch()
@@ -12,34 +11,17 @@ const MainInput = () => {
   const handleSubmit = useCallback((e) => {
     const newTask = { task: inputRef.current.value }
     if (e.key === 'Enter' && newTask.task.trim().length) {
-      (async () => {
-        try {
-          const data = await addItem(newTask);
-          dispatch(setTodos(data.list))
-        } catch (err) {
-          console.log(err);
-        }
-      })()
+      dispatch(fetchAddItem(newTask))
+      // dispatch(addItemRequest(newTask))
       inputRef.current.value = '';
     }
   }, [dispatch])
 
-  const isAllCompleted = useCallback(() => todoList.every((item) => !item.isActive), [todoList])
-
-  const isChecked = useMemo(() => {
-    return isAllCompleted()
-  }, [isAllCompleted])
+  const isChecked = useMemo(() => todoList.every((item) => !item.isActive), [todoList])
 
   const onSelect = useCallback((e) => {
     const isActive = { isActive: !e.target.checked };
-    (async () => {
-      try {
-        const data = await toggleAllItems(isActive);
-        dispatch(setTodos(data.list))
-      } catch(err) {
-        console.log(err);
-      }
-    })()
+    dispatch(fetchIsActive(isActive))
   }, [dispatch])
 
   return (
