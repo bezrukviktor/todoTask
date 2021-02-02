@@ -1,50 +1,44 @@
-export const LOAD_DATA = 'LOAD_DATA';
-export const ADD_ITEM = 'ADD_ITEM';
-export const SELECT_ALL = 'SELECT_ALL';
-export const TOGGLE_ITEM = 'TOGGLE_ITEM';
-export const REMOVE_ITEM = 'REMOVE_ITEM';
-export const EDIT_ITEM = 'EDIT_ITEM';
-export const REMOVE_ITEMS = 'REMOVE_ITEMS';
-export const SET_TODOS = 'SET_TODOS';
-export const TOGGLE_MODE = 'TOGGLE_MODE';
+import { IActionTypes } from '../interfaces/actionInterfaces'
 
-export const GET_LIST = {
+export const TOGGLE_MODE: string = 'TOGGLE_MODE';
+
+export const GET_LIST: IActionTypes = {
   REQUEST: 'GET_LIST_REQUEST',
   SUCCESS: 'GET_LIST_SUCCESS',
   FAILED: 'GET_LIST_FAILED'
 }
 
-export const _ADD_ITEM = {
+export const ADD_ITEM: IActionTypes = {
   REQUEST: 'ADD_ITEM_REQUEST',
   SUCCESS: 'ADD_ITEM_SUCCESS',
   FAILED: 'ADD_ITEM_FAILED'
 }
 
-export const _SELECT_ALL = {
+export const SELECT_ALL: IActionTypes = {
   REQUEST: 'SELECT_ALL_REQUEST',
   SUCCESS: 'SELECT_ALL_SUCCESS',
   FAILED: 'SELECT_ALL_FAILED'
 }
 
-export const _TOGGLE_ITEM = {
+export const TOGGLE_ITEM: IActionTypes = {
   REQUEST: 'TOGGLE_ITEM_REQUEST',
   SUCCESS: 'TOGGLE_ITEM_SUCCESS',
   FAILED: 'TOGGLE_ITEM_FAILED'
 }
 
-export const _REMOVE_ITEM = {
+export const REMOVE_ITEM: IActionTypes = {
   REQUEST: 'REMOVE_ITEM_REQUEST',
   SUCCESS: 'REMOVE_ITEM_SUCCESS',
   FAILED: 'REMOVE_ITEM_FAILED'
 }
 
-export const _EDIT_ITEM = {
+export const EDIT_ITEM: IActionTypes = {
   REQUEST: 'EDIT_ITEM_REQUEST',
   SUCCESS: 'EDIT_ITEM_SUCCESS',
   FAILED: 'EDIT_ITEM_FAILED'
 }
 
-export const _REMOVE_ITEMS = {
+export const REMOVE_ITEMS: IActionTypes = {
   REQUEST: 'REMOVE_ITEMS_REQUEST',
   SUCCESS: 'REMOVE_ITEMS_SUCCESS',
   FAILED: 'REMOVE_ITEMS_FAILED'

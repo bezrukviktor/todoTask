@@ -1,27 +1,26 @@
 import React, { useMemo, useCallback, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { fetchAddItem, fetchIsActive } from '../actions'
+import { addItemRequest, selectAllRequest } from '../actions/index'
 import { getTodolist } from '../selectors/todos'
 
 const MainInput = () => {
   const dispatch = useDispatch()
   const todoList = useSelector(getTodolist)
-  const inputRef = useRef()
+  const inputRef = useRef<HTMLInputElement>(null)
 
-  const handleSubmit = useCallback((e) => {
-    const newTask = { task: inputRef.current.value }
+  const handleSubmit = useCallback((e: React.KeyboardEvent): void => {
+    const newTask = { task: inputRef.current!.value }
     if (e.key === 'Enter' && newTask.task.trim().length) {
-      dispatch(fetchAddItem(newTask))
-      // dispatch(addItemRequest(newTask))
-      inputRef.current.value = '';
+      dispatch(addItemRequest(newTask))
+      inputRef.current!.value = '';
     }
   }, [dispatch])
 
-  const isChecked = useMemo(() => todoList.every((item) => !item.isActive), [todoList])
+  const isChecked: boolean = useMemo(() => todoList.every((item) => !item.isActive), [todoList])
 
-  const onSelect = useCallback((e) => {
+  const onSelect = useCallback((e): void => {
     const isActive = { isActive: !e.target.checked };
-    dispatch(fetchIsActive(isActive))
+    dispatch(selectAllRequest(isActive))
   }, [dispatch])
 
   return (
@@ -40,7 +39,7 @@ const MainInput = () => {
         checked={isChecked}
         onChange={onSelect}
       />
-      {!!todoList.length ?
+      {todoList.length ?
         <label
           className="checkAllLabel"
           htmlFor="checkAll"

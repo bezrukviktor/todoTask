@@ -1,9 +1,10 @@
-import React, { useCallback, useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 import { todoStates } from '../constants/constants'
-import { fetchToggleItem, fetchRemoveItem, fetchEditItem } from '../actions'
+import { toggleItemRequest, removeItemRequest, editItemRequest } from '../actions/index'
 import { useDispatch } from 'react-redux'
+import { ITodoItem } from '../interfaces/todoReducerInterfaces'
 
-const TodoListItem = ({ item }) => {
+const TodoListItem = ({ item, inputId }: { item: ITodoItem; inputId: string }) => {
   const dispatch = useDispatch()
 
   const isActiveItem = useMemo(() => {
@@ -12,20 +13,20 @@ const TodoListItem = ({ item }) => {
 
   const labelClassName = `todo-label ${isActiveItem}`
 
-  const onToggleItem = useCallback(() => {
-    const id = { id: item._id };
-    dispatch(fetchToggleItem(id))
+  const onToggleItem = useCallback(():void => {
+    const id = { id: item._id }
+    dispatch(toggleItemRequest(id))
   }, [dispatch, item._id])
 
-  const onRemoveItem = useCallback(() => {
-    const id = { id: item._id };
-    dispatch(fetchRemoveItem(id))
+  const onRemoveItem = useCallback(():void => {
+    const id = { id: item._id }
+    dispatch(removeItemRequest(id))
   }, [dispatch, item._id])
 
-  const onEditTask = useCallback((e) => {
-    const label = e.target;
-    label.contentEditable = true;
-    label.focus();
+  const onEditTask = useCallback((e):void => {
+    const label = e.target
+    label.contentEditable = true
+    label.focus()
   }, [])
 
   const submitEditableTodo = useCallback((e) => {
@@ -36,7 +37,7 @@ const TodoListItem = ({ item }) => {
       id,
       task
     };
-    dispatch(fetchEditItem(editableData))
+    dispatch(editItemRequest(editableData))
     label.contentEditable = false;
   }, [dispatch, item._id])
 
@@ -51,11 +52,11 @@ const TodoListItem = ({ item }) => {
       <input
         type="checkbox"
         className="todo-checkbox"
-        id={item._id}
+        id={inputId}
         checked={!item.isActive}
         onChange={onToggleItem}
       />
-      <label htmlFor={item._id} />
+      <label htmlFor={inputId} />
       <label
         className={labelClassName}
         onDoubleClick={onEditTask}
