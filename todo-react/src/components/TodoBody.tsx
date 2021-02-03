@@ -3,15 +3,16 @@ import { todoStates } from '../constants/constants'
 import TodoListItem from './TodoListItem'
 import { useSelector } from 'react-redux'
 import { getTodolist, getTodoMode } from '../selectors/todos'
+import { ITodoItem } from '../interfaces/stateTypes'
 
 const TodoBody = () => {
   const todoList = useSelector(getTodolist)
   const mode = useSelector(getTodoMode)
 
-  const activeTodos = todoList.filter((todoObj) => todoObj.isActive);
-  const completedTodos = todoList.filter((todoObj) => !todoObj.isActive);
+  const activeTodos = todoList.filter((todoObj) => todoObj.isActive)
+  const completedTodos = todoList.filter((todoObj) => !todoObj.isActive)
 
-  const todosArr = useMemo(() => {
+  const todosArr: Array<ITodoItem> = useMemo(() => {
     switch (mode) {
       case todoStates.active:
         return activeTodos

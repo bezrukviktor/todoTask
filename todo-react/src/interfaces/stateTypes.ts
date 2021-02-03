@@ -11,6 +11,10 @@ export interface ITodoItem {
  isActive: boolean
 }
 
+export interface IResponse {
+  list: Array<ITodoItem>
+}
+
 export interface IRootState {
   todoState: IInitialState
 }

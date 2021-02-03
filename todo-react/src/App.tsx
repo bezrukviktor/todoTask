@@ -7,7 +7,7 @@ import Spinner from './components/Spinner'
 import { getTodolist, getTodoError, getTodoLoader } from './selectors/todos'
 import { useSelector, useDispatch } from 'react-redux'
 import { useEffect } from 'react'
-import { getListRequest } from './actions/index'
+import { getListRequest } from './redux/actions/index'
 
 const App = () => {
   const dispatch = useDispatch()

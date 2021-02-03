@@ -32,21 +32,23 @@ import {
   removeItem,
   editItem,
   removeCompletedItems
-} from '../service/todoService'
+} from '../../api/todoAPI'
+import { IResponse } from '../../interfaces/stateTypes'
+import { IAction } from '../../interfaces/actionTypes'
+
 
 function* workerLoadData() {
   try {
-    const data = yield call(getTodos)
+    const data: IResponse = yield call(getTodos)
     yield put(getListSuccess(data.list))
   } catch (err) {
     yield put(getListFailed())
   }
 }
 
-function* workerAddItem({ payload }:any) {
+function* workerAddItem({ payload: task }: IAction) {  
   try {
-    const { task } = payload;
-    const data = yield call(addItem, task)
+    const data: IResponse = yield call(addItem, task)
     yield put(addItemSuccess(data.list))
   } catch (err) {
     console.error(err);
@@ -54,39 +56,36 @@ function* workerAddItem({ payload }:any) {
   }
 }
 
-function* workerSelectAll({ payload }:any) {
+function* workerSelectAll({ payload: isActive }: IAction) {
   try {
-    const { isActive } = payload;
-    const data = yield call(toggleAllItems, isActive)
+    const data: IResponse = yield call(toggleAllItems, isActive)
     yield put(selectAllSuccess(data.list))
   } catch (err) {
     yield put(selectAllFailed())
   }
 }
 
-function* workerToggleItem({ payload }:any) {
+function* workerToggleItem({ payload: id }: IAction) {
   try {
-    const { id } = payload;
-    const data = yield call(toggleItem, id)
+    const data: IResponse = yield call(toggleItem, id)
     yield put(toggleItemSuccess(data.list))
   } catch (err) {
     yield put(toggleItemFailed())
   }
 }
 
-function* workerRemoveItem({ payload }:any) {
+function* workerRemoveItem({ payload: id }: IAction) {
   try {
-    const { id } = payload;
-    const data = yield call(removeItem, id)
+    const data: IResponse = yield call(removeItem, id)
     yield put(removeItemSuccess(data.list))
   } catch (err) {
     yield put(removeItemFailed())
   }
 }
 
-function* workerEditItem({ payload }:any) {
+function* workerEditItem({ payload }: IAction) {
   try {
-    const data = yield call(editItem, payload)
+    const data: IResponse = yield call(editItem, payload)
     yield put(editItemSuccess(data.list))
   } catch (err) {
     yield put(editItemFailed())
@@ -95,7 +94,7 @@ function* workerEditItem({ payload }:any) {
 
 function* workerRemoveItems() {
   try {
-    const data = yield call(removeCompletedItems)
+    const data: IResponse = yield call(removeCompletedItems)
     yield put(removeItemsSuccess(data.list))
   } catch (err) {
     yield put(removeItemsFailed())

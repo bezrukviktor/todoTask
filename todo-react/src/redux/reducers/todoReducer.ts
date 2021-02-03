@@ -1,4 +1,4 @@
-import { todoStates } from '../constants/constants'
+import { todoStates } from '../../constants/constants'
 import {
   TOGGLE_MODE,
   GET_LIST,
@@ -9,8 +9,8 @@ import {
   EDIT_ITEM,
   REMOVE_ITEMS
 } from '../actions/actionTypes'
-import { IInitialState } from '../interfaces/todoReducerInterfaces'
-import { IAction } from '../interfaces/actionInterfaces'
+import { IInitialState } from '../../interfaces/stateTypes'
+import { IAction } from '../../interfaces/actionTypes'
 
 const initialState: IInitialState = {
   todoList: [],
@@ -38,7 +38,7 @@ const todoReducer = (state = initialState, action: IAction): IInitialState => {
       return {
         ...state,
         todoList: [
-          ...action.payload!.list!
+          ...action.payload!.list
         ],
         loading: false,
         error: false

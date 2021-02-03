@@ -1,6 +1,6 @@
 import React, { useMemo, useCallback, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { addItemRequest, selectAllRequest } from '../actions/index'
+import { addItemRequest, selectAllRequest } from '../redux/actions/index'
 import { getTodolist } from '../selectors/todos'
 
 const MainInput = () => {
@@ -8,9 +8,9 @@ const MainInput = () => {
   const todoList = useSelector(getTodolist)
   const inputRef = useRef<HTMLInputElement>(null)
 
-  const handleSubmit = useCallback((e: React.KeyboardEvent): void => {
-    const newTask = { task: inputRef.current!.value }
-    if (e.key === 'Enter' && newTask.task.trim().length) {
+  const handleSubmit = useCallback((e: React.KeyboardEvent) => {
+    const newTask: string = inputRef.current!.value
+    if (e.key === 'Enter' && newTask.trim().length) {
       dispatch(addItemRequest(newTask))
       inputRef.current!.value = '';
     }
@@ -18,8 +18,8 @@ const MainInput = () => {
 
   const isChecked: boolean = useMemo(() => todoList.every((item) => !item.isActive), [todoList])
 
-  const onSelect = useCallback((e): void => {
-    const isActive = { isActive: !e.target.checked };
+  const onSelect = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const isActive: boolean = !e.target.checked;
     dispatch(selectAllRequest(isActive))
   }, [dispatch])
 

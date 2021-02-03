@@ -1,6 +1,6 @@
-import { IActionTypes } from '../interfaces/actionInterfaces'
+import { IActionTypes } from '../../interfaces/actionTypes'
 
-export const TOGGLE_MODE: string = 'TOGGLE_MODE';
+export const TOGGLE_MODE: string = 'TOGGLE_MODE'
 
 export const GET_LIST: IActionTypes = {
   REQUEST: 'GET_LIST_REQUEST',

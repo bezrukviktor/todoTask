@@ -8,17 +8,17 @@ import {
   REMOVE_ITEMS,
   TOGGLE_MODE
 } from './actionTypes'
-import {IAction, ITask, IIsActive, IId, IData} from '../interfaces/actionInterfaces'
-import { ITodoItem } from '../interfaces/todoReducerInterfaces'
+import { IAction } from '../../interfaces/actionTypes'
+import { ITodoItem } from '../../interfaces/stateTypes'
 
 //==========Get List===========
 
-export const getListRequest = ():IAction => {
+export const getListRequest = (): IAction => {
   return {
     type: GET_LIST.REQUEST,
   }
 }
-export const getListSuccess = (list:Array<ITodoItem>):IAction => {
+export const getListSuccess = (list: Array<ITodoItem>): IAction => {
   return {
     type: GET_LIST.SUCCESS,
     payload: {
@@ -26,7 +26,7 @@ export const getListSuccess = (list:Array<ITodoItem>):IAction => {
     }
   }
 }
-export const getListFailed = ():IAction => {
+export const getListFailed = (): IAction => {
   return {
     type: GET_LIST.FAILED,
   }
@@ -34,23 +34,23 @@ export const getListFailed = ():IAction => {
 
 //==========Add Item===========
 
-export const addItemRequest = (task:ITask):IAction => {
-  return { 
+export const addItemRequest = (task: string): IAction => {
+  return {
     type: ADD_ITEM.REQUEST,
-    payload:{
+    payload: {
       task
     }
   }
 }
-export const addItemSuccess = (list:Array<ITodoItem>):IAction => {
-  return { 
+export const addItemSuccess = (list: Array<ITodoItem>): IAction => {
+  return {
     type: ADD_ITEM.SUCCESS,
-    payload:{
+    payload: {
       list
     }
   }
 }
-export const addItemFailed = ():IAction => {
+export const addItemFailed = (): IAction => {
   return {
     type: ADD_ITEM.FAILED,
   }
@@ -58,7 +58,7 @@ export const addItemFailed = ():IAction => {
 
 // ==========Select All===========
 
-export const selectAllRequest = (isActive:IIsActive):IAction => {
+export const selectAllRequest = (isActive: boolean): IAction => {
   return {
     type: SELECT_ALL.REQUEST,
     payload: {
@@ -66,7 +66,7 @@ export const selectAllRequest = (isActive:IIsActive):IAction => {
     }
   }
 }
-export const selectAllSuccess = (list:Array<ITodoItem>):IAction => {
+export const selectAllSuccess = (list: Array<ITodoItem>): IAction => {
   return {
     type: SELECT_ALL.SUCCESS,
     payload: {
@@ -74,7 +74,7 @@ export const selectAllSuccess = (list:Array<ITodoItem>):IAction => {
     }
   }
 }
-export const selectAllFailed = ():IAction => {
+export const selectAllFailed = (): IAction => {
   return {
     type: SELECT_ALL.FAILED,
   }
@@ -82,7 +82,7 @@ export const selectAllFailed = ():IAction => {
 
 //==========Toggle Item===========
 
-export const toggleItemRequest = (id:IId):IAction => {
+export const toggleItemRequest = (id: string): IAction => {
   return {
     type: TOGGLE_ITEM.REQUEST,
     payload: {
@@ -90,7 +90,7 @@ export const toggleItemRequest = (id:IId):IAction => {
     }
   }
 }
-export const toggleItemSuccess = (list:Array<ITodoItem>):IAction => {
+export const toggleItemSuccess = (list: Array<ITodoItem>): IAction => {
   return {
     type: TOGGLE_ITEM.SUCCESS,
     payload: {
@@ -98,7 +98,7 @@ export const toggleItemSuccess = (list:Array<ITodoItem>):IAction => {
     }
   }
 }
-export const toggleItemFailed = ():IAction => {
+export const toggleItemFailed = (): IAction => {
   return {
     type: TOGGLE_ITEM.FAILED,
   }
@@ -106,7 +106,7 @@ export const toggleItemFailed = ():IAction => {
 
 //===========Remove Item=============
 
-export const removeItemRequest = (id:IId):IAction => {
+export const removeItemRequest = (id: string): IAction => {
   return {
     type: REMOVE_ITEM.REQUEST,
     payload: {
@@ -114,7 +114,7 @@ export const removeItemRequest = (id:IId):IAction => {
     }
   }
 }
-export const removeItemSuccess = (list:Array<ITodoItem>):IAction => {
+export const removeItemSuccess = (list: Array<ITodoItem>): IAction => {
   return {
     type: REMOVE_ITEM.SUCCESS,
     payload: {
@@ -122,7 +122,7 @@ export const removeItemSuccess = (list:Array<ITodoItem>):IAction => {
     }
   }
 }
-export const removeItemFailed = ():IAction => {
+export const removeItemFailed = (): IAction => {
   return {
     type: REMOVE_ITEM.FAILED
   }
@@ -130,15 +130,16 @@ export const removeItemFailed = ():IAction => {
 
 //=========Edit Item==========
 
-export const editItemRequest = (data:IData):IAction => {
+export const editItemRequest = (id: string, task: string): IAction => {
   return {
     type: EDIT_ITEM.REQUEST,
     payload: {
-      ...data
+      id,
+      task
     }
   }
 }
-export const editItemSuccess = (list:Array<ITodoItem>):IAction => {
+export const editItemSuccess = (list: Array<ITodoItem>): IAction => {
   return {
     type: EDIT_ITEM.SUCCESS,
     payload: {
@@ -146,7 +147,7 @@ export const editItemSuccess = (list:Array<ITodoItem>):IAction => {
     }
   }
 }
-export const editItemFailed = ():IAction => {
+export const editItemFailed = (): IAction => {
   return {
     type: EDIT_ITEM.FAILED
   }
@@ -154,12 +155,12 @@ export const editItemFailed = ():IAction => {
 
 //=========Remove Items==========
 
-export const removeItemsRequest = ():IAction => {
+export const removeItemsRequest = (): IAction => {
   return {
     type: REMOVE_ITEMS.REQUEST
   }
 }
-export const removeItemsSuccess = (list:Array<ITodoItem>):IAction => {
+export const removeItemsSuccess = (list: Array<ITodoItem>): IAction => {
   return {
     type: REMOVE_ITEMS.SUCCESS,
     payload: {
@@ -167,13 +168,13 @@ export const removeItemsSuccess = (list:Array<ITodoItem>):IAction => {
     }
   }
 }
-export const removeItemsFailed = ():IAction => {
+export const removeItemsFailed = (): IAction => {
   return {
     type: REMOVE_ITEMS.FAILED
   }
 }
 
-export const toggleMode = (mode: string | null):IAction => {
+export const toggleMode = (mode: string | null): IAction => {
   return {
     type: TOGGLE_MODE,
     payload: {

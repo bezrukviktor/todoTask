@@ -1,9 +1,9 @@
-import React, { Dispatch, useCallback }  from 'react';
+import { useCallback }  from 'react';
 import { useDispatch } from 'react-redux'
-import { getListRequest } from '../actions/index'
+import { getListRequest } from '../redux/actions/index'
 
 const ErrorPage = () => {
-  const dispatch:Dispatch<any> = useDispatch();
+  const dispatch = useDispatch();
 
   const getTodoList = useCallback((): void => {
     dispatch(getListRequest());

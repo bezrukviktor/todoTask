@@ -1,29 +1,32 @@
 import { useCallback, useMemo } from 'react'
 import { todoStates } from '../constants/constants'
-import { toggleItemRequest, removeItemRequest, editItemRequest } from '../actions/index'
+import { toggleItemRequest, removeItemRequest, editItemRequest } from '../redux/actions/index'
 import { useDispatch } from 'react-redux'
-import { ITodoItem } from '../interfaces/todoReducerInterfaces'
+import { ITodoItem } from '../interfaces/stateTypes'
 
-const TodoListItem = ({ item, inputId }: { item: ITodoItem; inputId: string }) => {
+interface Props {
+  item: ITodoItem
+  inputId: string
+}
+
+const TodoListItem = ({ item, inputId }: Props) => {
   const dispatch = useDispatch()
 
-  const isActiveItem = useMemo(() => {
-    return item.isActive ? todoStates.active.toLowerCase() : todoStates.completed.toLowerCase();
+  const itemStatus: string = useMemo(() => {
+    return item.isActive ? todoStates.active.toLowerCase() : todoStates.completed.toLowerCase()
   }, [item.isActive])
 
-  const labelClassName = `todo-label ${isActiveItem}`
-
-  const onToggleItem = useCallback(():void => {
-    const id = { id: item._id }
+  const onToggleItem = useCallback(() => {
+    const id = item._id
     dispatch(toggleItemRequest(id))
   }, [dispatch, item._id])
 
-  const onRemoveItem = useCallback(():void => {
-    const id = { id: item._id }
+  const onRemoveItem = useCallback(() => {
+    const id = item._id
     dispatch(removeItemRequest(id))
   }, [dispatch, item._id])
 
-  const onEditTask = useCallback((e):void => {
+  const onEditTask = useCallback((e) => {
     const label = e.target
     label.contentEditable = true
     label.focus()
@@ -33,17 +36,13 @@ const TodoListItem = ({ item, inputId }: { item: ITodoItem; inputId: string }) =
     const label = e.target;
     const id = item._id;
     const task = e.target.textContent;
-    const editableData = {
-      id,
-      task
-    };
-    dispatch(editItemRequest(editableData))
+    dispatch(editItemRequest(id, task))
     label.contentEditable = false;
   }, [dispatch, item._id])
 
   const onPressEnter = useCallback((e) => {
     if (e.key === 'Enter') {
-      e.target.blur();
+      e.target.blur()
     }
   }, [])
 
@@ -58,7 +57,7 @@ const TodoListItem = ({ item, inputId }: { item: ITodoItem; inputId: string }) =
       />
       <label htmlFor={inputId} />
       <label
-        className={labelClassName}
+        className={`todo-label ${itemStatus}`}
         onDoubleClick={onEditTask}
         onKeyPress={onPressEnter}
         onBlur={submitEditableTodo}

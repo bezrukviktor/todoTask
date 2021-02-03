@@ -6,11 +6,12 @@ import { watchAll } from '../sagas/sagas'
 import logger from 'redux-logger'
 
 const sagaMiddleware = createSagaMiddleware()
+const composeEnhancers = (window && (window as any).__REDUX_DEVTOOLS_EXTENSION__());
 
 const store = createStore(
   rootReducer,
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-  ? composeWithDevTools(applyMiddleware(logger ,sagaMiddleware)) 
+  composeEnhancers
+  ? composeWithDevTools(applyMiddleware(logger, sagaMiddleware)) 
   : compose(applyMiddleware(sagaMiddleware))
 );
 

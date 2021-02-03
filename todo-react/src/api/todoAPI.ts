@@ -1,5 +1,6 @@
 import { BASE_URL, ENDPOINTS } from '../constants/apiConstants'
-const postParam = (data) => {
+import { IAction } from '../interfaces/actionTypes'
+const postParam = (data: IAction) => {
   return {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -7,27 +8,27 @@ const postParam = (data) => {
   }
 }
 
-export const addItem = async (data) => {
+export const addItem = async (data: IAction) => {
   const res = await fetch(BASE_URL + ENDPOINTS.addItem, postParam(data))
   return await res.json()
 }
 
-export const removeItem = async (data) => {
+export const removeItem = async (data: IAction) => {
   const res = await fetch(BASE_URL + ENDPOINTS.removeItem, postParam(data))
   return await res.json()
 }
 
-export const toggleAllItems = async (data) => {
+export const toggleAllItems = async (data: IAction) => {
   const res = await fetch(BASE_URL + ENDPOINTS.toggleAllItems, postParam(data))
   return await res.json()
 }
 
-export const toggleItem = async (data) => {
+export const toggleItem = async (data: IAction) => {
   const res = await fetch(BASE_URL + ENDPOINTS.toggleItem, postParam(data))
   return await res.json()
 }
 
-export const editItem = async (data) => {
+export const editItem = async (data: IAction) => {
   const res = await fetch(BASE_URL + ENDPOINTS.editItem, postParam(data))
   return await res.json()
 }
@@ -42,6 +43,5 @@ export const removeCompletedItems = async () => {
 
 export const getTodos = async () => {
   const res = await fetch(BASE_URL + ENDPOINTS.home)
-    .then((response) => response.json());
-  return await res;
+  return await res.json();
 }

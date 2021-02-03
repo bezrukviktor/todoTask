@@ -1,4 +1,4 @@
-import { IRootState, ITodoItem } from '../interfaces/todoReducerInterfaces'
+import { IRootState, ITodoItem } from '../interfaces/stateTypes'
 
 export const getTodolist = (state: IRootState):Array<ITodoItem> => state.todoState.todoList
 export const getTodoMode = (state: IRootState):string => state.todoState.mode
