@@ -11,9 +11,13 @@ import {
   toggleAllItems,
   toggleItem,
   editItem,
-  removeCompletedItems
+  removeCompletedItems,
+  addUser,
+  loginUser,
 } from './apiHandlers/handlers'
 import { config } from './config'
+import jwt from 'jsonwebtoken'
+import bcrypt from 'bcrypt'
 
 const uri = config.DB_URL
 const server = new Koa();
@@ -23,9 +27,10 @@ server.use(cors());
 server.use(bodyParser());
 
 (async () => {
-  const client = await MongoClient.connect(uri, { useUnifiedTopology: true });
-  const db = client.db(process.env.MONGO_DB_NAME);
-  const todosCollection = db.collection(process.env.MONGO_DB_COLLECTION!);
+  const client = await MongoClient.connect(uri, { useUnifiedTopology: true })
+  const db = client.db(process.env.MONGO_DB_NAME)
+  const todosCollection = db.collection(process.env.TODOS_COLLECTION!)
+  const usersCollection = db.collection(process.env.USERS_COLLECTION!)
 
   router.get(ENDPOINTS.home, getList(todosCollection))
   router.post(ENDPOINTS.addItem, addItem(todosCollection))
@@ -34,6 +39,9 @@ server.use(bodyParser());
   router.post(ENDPOINTS.toggleItem, toggleItem(todosCollection))
   router.post(ENDPOINTS.toggleAllItems, toggleAllItems(todosCollection))
   router.post(ENDPOINTS.removeCompletedItems, removeCompletedItems(todosCollection))
+
+  router.post(ENDPOINTS.signUp, addUser(usersCollection))
+  router.post(ENDPOINTS.login, loginUser(usersCollection))
 })()
 
 server.use(router.routes()).listen(process.env.DB_PORT)

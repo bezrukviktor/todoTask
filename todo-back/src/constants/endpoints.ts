@@ -5,5 +5,7 @@ export const ENDPOINTS = {
   toggleItem: '/toggle-item',
   toggleAllItems: '/toggle-all-items',
   removeCompletedItems: '/remove-completed-items',
-  home: '/home'
+  home: '/home',
+  signUp: '/signup',
+  login: '/login',
 }
