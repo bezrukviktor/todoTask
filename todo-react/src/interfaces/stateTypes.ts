@@ -5,6 +5,10 @@ export interface IInitialState {
   loading: boolean
 }
 
+export interface IAuthInitjialState {
+  isSighUp: boolean
+}
+
 export interface ITodoItem {
  _id: string
  task: string
@@ -17,4 +21,5 @@ export interface IResponse {
 
 export interface IRootState {
   todoState: IInitialState
+  authState: IAuthInitjialState
 }

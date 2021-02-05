@@ -1,9 +1,9 @@
 import React, { useMemo } from 'react'
-import { todoStates } from '../constants/constants'
+import { todoStates } from '../../constants/constants'
 import TodoListItem from './TodoListItem'
 import { useSelector } from 'react-redux'
-import { getTodolist, getTodoMode } from '../selectors/todos'
-import { ITodoItem } from '../interfaces/stateTypes'
+import { getTodolist, getTodoMode } from '../../selectors/todos'
+import { ITodoItem } from '../../interfaces/stateTypes'
 
 const TodoBody = () => {
   const todoList = useSelector(getTodolist)

@@ -1,8 +1,8 @@
 import { useCallback, useMemo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { todoStates } from '../constants/constants'
-import { toggleMode, removeItemsRequest } from '../redux/actions/index'
-import { getTodolist, getTodoMode } from '../selectors/todos'
+import { todoStates } from '../../constants/constants'
+import { toggleMode, removeItemsRequest } from '../../redux/actions/index'
+import { getTodolist, getTodoMode } from '../../selectors/todos'
 
 const TodoFooter = () => {
   const dispatch = useDispatch()

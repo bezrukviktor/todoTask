@@ -1,39 +1,36 @@
 import './App.css'
-import MainInput from './components/MainInput'
-import TodoBody from './components/TodoBody'
-import TodoFooter from './components/TodoFooter'
-import ErrorPage from './components/ErrorPage'
-import Spinner from './components/Spinner'
-import { getTodolist, getTodoError, getTodoLoader } from './selectors/todos'
-import { useSelector, useDispatch } from 'react-redux'
-import { useEffect } from 'react'
-import { getListRequest } from './redux/actions/index'
+import React from 'react'
+import Header from './components/Header'
+import HomePage from './components/homePage/HomePage'
+import SignUp from './components/auth/signup/Signup'
+import LogIn from './components/auth/login/Login'
+import {
+  Switch,
+  Route,
+  Redirect,
+} from "react-router-dom";
+import { useSelector } from 'react-redux'
+import { getRegStatus } from './selectors/todos'
 
 const App = () => {
-  const dispatch = useDispatch()
-  const todoList = useSelector(getTodolist)
-  const isError = useSelector(getTodoError)
-  const isLoading = useSelector(getTodoLoader)
-
-  useEffect(() => {
-    dispatch(getListRequest())
-  }, [dispatch])
-
+  const isUserReg = useSelector(getRegStatus)
+  
   return (
-    <div className="App">
-      <header className="header">
-        <h1 className="header__title">todos</h1>
-      </header>
+    <>
+      <Header />
       <main className="main">
-        {isLoading ? <Spinner /> : null}
-        {isError ? <ErrorPage /> : null}
-        <section className="todo-container">
-          <MainInput />
-          <TodoBody />
-          {todoList.length ? <TodoFooter /> : null}
-        </section>
+        <Switch>
+          <Route exact path='/'>
+            <Redirect to="/login" />
+          </Route>
+          <Route path='/home' component={HomePage} />
+          <Route path='/signup' component={SignUp} >
+            {isUserReg ? <Redirect to="/login" /> : <SignUp />}
+          </Route>
+          <Route path='/login' component={LogIn} />
+        </Switch>
       </main>
-    </div>
+    </>
   );
 }
 

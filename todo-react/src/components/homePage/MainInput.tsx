@@ -1,7 +1,7 @@
 import React, { useMemo, useCallback, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { addItemRequest, selectAllRequest } from '../redux/actions/index'
-import { getTodolist } from '../selectors/todos'
+import { addItemRequest, selectAllRequest } from '../../redux/actions/index'
+import { getTodolist } from '../../selectors/todos'
 
 const MainInput = () => {
   const dispatch = useDispatch()

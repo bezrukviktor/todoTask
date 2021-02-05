@@ -1,8 +1,8 @@
 import { useCallback, useMemo } from 'react'
-import { todoStates } from '../constants/constants'
-import { toggleItemRequest, removeItemRequest, editItemRequest } from '../redux/actions/index'
+import { todoStates } from '../../constants/constants'
+import { toggleItemRequest, removeItemRequest, editItemRequest } from '../../redux/actions/index'
 import { useDispatch } from 'react-redux'
-import { ITodoItem } from '../interfaces/stateTypes'
+import { ITodoItem } from '../../interfaces/stateTypes'
 
 interface Props {
   item: ITodoItem
