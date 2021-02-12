@@ -8,4 +8,6 @@ export const ENDPOINTS = {
   home: '/home',
   signUp: '/signup',
   login: '/login',
+  getAuth: '/getAuth',
+  refresh_token: '/refresh_token'
 }

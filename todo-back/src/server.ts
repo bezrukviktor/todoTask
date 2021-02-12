@@ -12,12 +12,14 @@ import {
   toggleItem,
   editItem,
   removeCompletedItems,
-  addUser,
-  loginUser,
-} from './apiHandlers/handlers'
+} from './apiHandlers/todoHandlers'
+import {
+  login,
+  authVerify,
+  signUp,
+  refreshToken,
+} from './apiHandlers/authHandlers'
 import { config } from './config'
-import jwt from 'jsonwebtoken'
-import bcrypt from 'bcrypt'
 
 const uri = config.DB_URL
 const server = new Koa();
@@ -32,16 +34,17 @@ server.use(bodyParser());
   const todosCollection = db.collection(process.env.TODOS_COLLECTION!)
   const usersCollection = db.collection(process.env.USERS_COLLECTION!)
 
-  router.get(ENDPOINTS.home, getList(todosCollection))
-  router.post(ENDPOINTS.addItem, addItem(todosCollection))
-  router.post(ENDPOINTS.editItem, editItem(todosCollection))
-  router.post(ENDPOINTS.removeItem, removeItem(todosCollection))
-  router.post(ENDPOINTS.toggleItem, toggleItem(todosCollection))
-  router.post(ENDPOINTS.toggleAllItems, toggleAllItems(todosCollection))
-  router.post(ENDPOINTS.removeCompletedItems, removeCompletedItems(todosCollection))
+  router.get(ENDPOINTS.home, authVerify, getList(todosCollection))
+  router.post(ENDPOINTS.addItem, authVerify, addItem(todosCollection))
+  router.post(ENDPOINTS.editItem, authVerify, editItem(todosCollection))
+  router.post(ENDPOINTS.removeItem, authVerify, removeItem(todosCollection))
+  router.post(ENDPOINTS.toggleItem, authVerify, toggleItem(todosCollection))
+  router.post(ENDPOINTS.toggleAllItems, authVerify, toggleAllItems(todosCollection))
+  router.post(ENDPOINTS.removeCompletedItems, authVerify, removeCompletedItems(todosCollection))
 
-  router.post(ENDPOINTS.signUp, addUser(usersCollection))
-  router.post(ENDPOINTS.login, loginUser(usersCollection))
+  router.post(ENDPOINTS.signUp, signUp(usersCollection))
+  router.post(ENDPOINTS.login, login(usersCollection))
+  router.post(ENDPOINTS.refresh_token, refreshToken(usersCollection))
 })()
 
 server.use(router.routes()).listen(process.env.DB_PORT)
