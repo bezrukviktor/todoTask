@@ -7,7 +7,9 @@ import {
   TOGGLE_ITEM,
   REMOVE_ITEM,
   EDIT_ITEM,
-  REMOVE_ITEMS
+  REMOVE_ITEMS,
+  LOGOUT,
+  REFRESH_TOKEN
 } from '../actions/actionTypes'
 import { IInitialState } from '../../interfaces/stateTypes'
 import { IAction } from '../../interfaces/actionTypes'
@@ -43,6 +45,12 @@ const todoReducer = (state = initialState, action: IAction): IInitialState => {
         loading: false,
         error: false
       }
+    case REFRESH_TOKEN.SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        error: false
+      }
     case REMOVE_ITEMS.FAILED:
     case EDIT_ITEM.FAILED:
     case REMOVE_ITEM.FAILED:
@@ -60,6 +68,11 @@ const todoReducer = (state = initialState, action: IAction): IInitialState => {
         ...state,
         mode: action.payload?.mode
       }
+    case LOGOUT:
+      return {
+        ...initialState
+      }
+
     default:
       return state
   }

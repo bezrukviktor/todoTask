@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { todoStates } from '../../constants/constants'
-import { toggleMode, removeItemsRequest } from '../../redux/actions/index'
+import { toggleMode, removeItemsRequest } from '../../redux/actions/todoActions'
 import { getTodolist, getTodoMode } from '../../selectors/todos'
 
 const TodoFooter = () => {

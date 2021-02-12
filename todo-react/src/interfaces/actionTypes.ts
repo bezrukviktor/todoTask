@@ -8,3 +8,8 @@ export interface IActionTypes {
   SUCCESS: string
   FAILED: string
 }
+
+export interface ITokens {
+  access_token: string
+  refresh_token: string
+}

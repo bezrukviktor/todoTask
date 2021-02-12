@@ -1,37 +1,40 @@
 import { IAction } from "../../interfaces/actionTypes"
-import { LOGIN, SIGN_UP } from "../actions/actionTypes"
+import { LOGIN, LOGOUT, REFRESH_TOKEN, SIGN_UP } from "../actions/actionTypes"
+import { accessToken, refreshToken, getUsername } from '../../_helpers/token'
 
 const initialState = {
-  isSignUp: false,
-  isUserExist: false,
-  isLogin: false,
-  loginErr: false,
-  passErr: false
+  accessToken,
+  refreshToken,
+  username: getUsername(),
+  errorMessage: ''
 }
 
 const authReducer = (state = initialState, action: IAction) => {
   switch (action.type) {
-    case SIGN_UP.SUCCESS:
-      return {
-        ...state,
-        isSignUp: true
-      }
     case LOGIN.SUCCESS:
       return {
         ...state,
-        isLogin: true
+        accessToken: action.payload.tokens.access_token,
+        refreshToken: action.payload.tokens.refresh_token,
+        username: action.payload.username,
+      }
+    case REFRESH_TOKEN.SUCCESS:
+      return {
+        ...state,
+        accessToken: action.payload.tokens.access_token,
+        refreshToken: action.payload.tokens.refresh_token,
       }
     case SIGN_UP.FAILED:
-      return {
-        ...state,
-        isUserExist: true
-      }
     case LOGIN.FAILED:
-      console.log(action);
-      
       return {
         ...state,
-        loginErr: true
+        errorMessage: action.payload.errorMessage
+      }
+    case LOGOUT:
+      return {
+        ...state,
+        accessToken: '',
+        username: ''
       }
     default:
       return state

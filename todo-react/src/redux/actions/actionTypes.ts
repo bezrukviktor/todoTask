@@ -55,3 +55,11 @@ export const LOGIN: IActionTypes = {
   SUCCESS: 'LOGIN_SUCCESS',
   FAILED: 'LOGIN_FAILED'
 }
+
+export const REFRESH_TOKEN: IActionTypes = {
+  REQUEST: 'REFRESH_TOKEN_REQUEST',
+  SUCCESS: 'REFRESH_TOKEN_SUCCESS',
+  FAILED: 'REFRESH_TOKEN_FAILED'
+}
+
+export const LOGOUT: string = 'LOGOUT'

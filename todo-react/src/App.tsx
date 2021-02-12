@@ -1,36 +1,24 @@
 import './App.css'
 import React from 'react'
 import Header from './components/Header'
-import HomePage from './components/homePage/HomePage'
-import SignUp from './components/auth/signup/Signup'
-import LogIn from './components/auth/login/Login'
-import {
-  Switch,
-  Route,
-  Redirect,
-} from "react-router-dom";
-import { useSelector } from 'react-redux'
-import { getRegStatus } from './selectors/todos'
+import HomePage from './components/home/HomePage'
+import PrivateRoute from './components/PrivateRoute'
+import { BrowserRouter, Switch } from "react-router-dom";
+import SignUp from './components/auth/Signup'
+import LogIn from './components/auth/Login'
 
 const App = () => {
-  const isUserReg = useSelector(getRegStatus)
-  
   return (
-    <>
+    <BrowserRouter>
       <Header />
       <main className="main">
         <Switch>
-          <Route exact path='/'>
-            <Redirect to="/login" />
-          </Route>
-          <Route path='/home' component={HomePage} />
-          <Route path='/signup' component={SignUp} >
-            {isUserReg ? <Redirect to="/login" /> : <SignUp />}
-          </Route>
-          <Route path='/login' component={LogIn} />
+          <PrivateRoute exact path='/' component={HomePage} />
+          <PrivateRoute exact path='/signup' component={SignUp} secure />
+          <PrivateRoute exact path='/login' component={LogIn} secure />
         </Switch>
       </main>
-    </>
+    </BrowserRouter>
   );
 }
 

@@ -6,7 +6,7 @@ import MainInput from './MainInput'
 import TodoBody from './TodoBody'
 import TodoFooter from './TodoFooter'
 import { useEffect } from "react"
-import { getListRequest } from "../../redux/actions"
+import { getListRequest } from "../../redux/actions/todoActions"
 
 const HomePage = () => {
   const todoList = useSelector(getTodolist)

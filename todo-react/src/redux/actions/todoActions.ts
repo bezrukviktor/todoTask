@@ -157,7 +157,7 @@ export const editItemFailed = (): IAction => {
 
 export const removeItemsRequest = (): IAction => {
   return {
-    type: REMOVE_ITEMS.REQUEST
+    type: REMOVE_ITEMS.REQUEST,
   }
 }
 export const removeItemsSuccess = (list: Array<ITodoItem>): IAction => {

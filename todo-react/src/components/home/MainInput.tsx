@@ -1,6 +1,6 @@
 import React, { useMemo, useCallback, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { addItemRequest, selectAllRequest } from '../../redux/actions/index'
+import { addItemRequest, selectAllRequest } from '../../redux/actions/todoActions'
 import { getTodolist } from '../../selectors/todos'
 
 const MainInput = () => {
@@ -16,7 +16,7 @@ const MainInput = () => {
     }
   }, [dispatch])
 
-  const isChecked: boolean = useMemo(() => todoList.every((item) => !item.isActive), [todoList])
+  const isAllChecked: boolean = useMemo(() => todoList.every((item) => !item.isActive), [todoList])
 
   const onSelect = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const isActive: boolean = !e.target.checked;
@@ -36,7 +36,7 @@ const MainInput = () => {
         type="checkbox"
         id="checkAll"
         className="checkAll"
-        checked={isChecked}
+        checked={isAllChecked}
         onChange={onSelect}
       />
       {todoList.length ?

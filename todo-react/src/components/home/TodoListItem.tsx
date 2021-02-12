@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from 'react'
 import { todoStates } from '../../constants/constants'
-import { toggleItemRequest, removeItemRequest, editItemRequest } from '../../redux/actions/index'
+import { toggleItemRequest, removeItemRequest, editItemRequest } from '../../redux/actions/todoActions'
 import { useDispatch } from 'react-redux'
 import { ITodoItem } from '../../interfaces/stateTypes'
 
