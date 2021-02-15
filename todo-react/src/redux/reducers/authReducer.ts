@@ -1,8 +1,9 @@
 import { IAction } from "../../interfaces/actionTypes"
 import { LOGIN, LOGOUT, REFRESH_TOKEN, SIGN_UP } from "../actions/actionTypes"
 import { accessToken, refreshToken, getUsername } from '../../_helpers/token'
+import { IAuthInitialState } from "../../interfaces/stateTypes"
 
-const initialState = {
+const initialState: IAuthInitialState = {
   accessToken,
   refreshToken,
   username: getUsername(),

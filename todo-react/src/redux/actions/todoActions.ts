@@ -6,7 +6,7 @@ import {
   REMOVE_ITEM,
   EDIT_ITEM,
   REMOVE_ITEMS,
-  TOGGLE_MODE
+  TOGGLE_MODE,
 } from './actionTypes'
 import { IAction } from '../../interfaces/actionTypes'
 import { ITodoItem } from '../../interfaces/stateTypes'

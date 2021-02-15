@@ -5,8 +5,11 @@ export interface IInitialState {
   loading: boolean
 }
 
-export interface IAuthInitjialState {
-  isSighUp: boolean
+export interface IAuthInitialState {
+  accessToken: string
+  refreshToken: string
+  username: string
+  errorMessage: string
 }
 
 export interface ITodoItem {
@@ -21,5 +24,14 @@ export interface IResponse {
 
 export interface IRootState {
   todoState: IInitialState
-  authState: IAuthInitjialState
+  authState: IAuthInitialState
+}
+
+export interface IRefreshToken {
+  refresh_token: string
+}
+
+export interface IAuth {
+  username: string
+  pass: string
 }

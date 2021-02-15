@@ -1,4 +1,4 @@
-import { takeEvery, put, call, all, select, race, take } from 'redux-saga/effects'
+import { takeEvery, put, call, all, select } from 'redux-saga/effects'
 import {
   getListSuccess,
   getListFailed,
@@ -14,7 +14,7 @@ import {
   editItemFailed,
   removeItemsSuccess,
   removeItemsFailed,
-  getListRequest
+  getListRequest,
 } from '../actions/todoActions'
 import {
   GET_LIST,
@@ -42,32 +42,33 @@ import { clearStorage, saveTokens } from '../../_helpers/token'
 import { getAccessToken, getRefreshToken } from '../../selectors/todos'
 import { refreshTokens } from '../../api/authAPI'
 
-
-function* workerLoadData() {
-  const accessToken = yield select(getAccessToken) // get access token from redux store
-  try {
-    const data: IResponse = yield call(getTodos, accessToken) // get data from backend
-    yield put(getListSuccess(data.list)) // dispatch data to redux store
-  } catch (err) {
-    err.status === 401 ? // if access token is expired I get 401
-    yield put(refreshTokenRequest()) : // refresh tokens | (there is worker for this req below)
-    yield put(getListFailed()) // show error page
-  }
-}
-
-function* workerRefreshToken() { //  <--------- refreshTokenRequest 
-  const accessToken = yield select(getAccessToken) // get access token from redux store
+function* workerRefreshToken() {
+  const accessToken = yield select(getAccessToken) 
   const refreshToken = {
     refresh_token: yield select(getRefreshToken)
-  } // get refresh token from redux store
+  } 
   try {
-    const res = yield call(refreshTokens, refreshToken, accessToken) // get new pairs of tokens
-    saveTokens(JSON.stringify(res.tokens)) // save new tokens to local store
-    yield put(refreshTokenSuccess(res.tokens)) // save new tokens to redux store
-    // how i can repeat previous request ? 
+    const res = yield call(refreshTokens, refreshToken, accessToken) 
+    saveTokens(JSON.stringify(res.tokens)) 
+    yield put(refreshTokenSuccess(res.tokens))
+    yield put(getListRequest())
   } catch (err) {
     clearStorage()
     yield put(logOutAction())
+  }
+}
+
+function* workerLoadData() {
+  const accessToken = yield select(getAccessToken) 
+  try {
+    const data: IResponse = yield call(getTodos, accessToken) 
+    yield put(getListSuccess(data.list)) 
+  } catch (err) {
+    if (err.status === 401) {
+      yield put(refreshTokenRequest())
+    } else {
+      yield put(getListFailed())
+    }
   }
 }
 
@@ -78,8 +79,7 @@ function* workerAddItem({ payload }: IAction) {
     yield put(addItemSuccess(data.list))
   } catch (err) {
     if (err.status === 401) {
-      clearStorage()
-      yield put(logOutAction())
+      yield put(refreshTokenRequest())
     } else {
       yield put(addItemFailed())
     }
@@ -93,8 +93,7 @@ function* workerSelectAll({ payload }: IAction) {
     yield put(selectAllSuccess(data.list))
   } catch (err) {
     if (err.status === 401) {
-      clearStorage()
-      yield put(logOutAction())
+      yield put(refreshTokenRequest())
     } else {
       yield put(selectAllFailed())
     }
@@ -108,8 +107,7 @@ function* workerToggleItem({ payload: id }: IAction) {
     yield put(toggleItemSuccess(data.list))
   } catch (err) {
     if (err.status === 401) {
-      clearStorage()
-      yield put(logOutAction())
+      yield put(refreshTokenRequest())
     } else {
       yield put(toggleItemFailed())
     }
@@ -123,8 +121,7 @@ function* workerRemoveItem({ payload: id }: IAction) {
     yield put(removeItemSuccess(data.list))
   } catch (err) {
     if (err.status === 401) {
-      clearStorage()
-      yield put(logOutAction())
+      yield put(refreshTokenRequest())
     } else {
       yield put(removeItemFailed())
     }
@@ -138,8 +135,7 @@ function* workerEditItem({ payload }: IAction) {
     yield put(editItemSuccess(data.list))
   } catch (err) {
     if (err.status === 401) {
-      clearStorage()
-      yield put(logOutAction())
+      yield put(refreshTokenRequest())
     } else {
       yield put(editItemFailed())
     }
@@ -153,8 +149,7 @@ function* workerRemoveItems() {
     yield put(removeItemsSuccess(data.list))
   } catch (err) {
     if (err.status === 401) {
-      clearStorage()
-      yield put(logOutAction())
+      yield put(refreshTokenRequest())
     } else {
       yield put(removeItemsFailed())
     }

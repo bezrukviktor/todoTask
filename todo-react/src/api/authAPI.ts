@@ -1,6 +1,7 @@
 import { BASE_URL, ENDPOINTS } from '../constants/apiConstants'
+import { IAuth, IRefreshToken } from '../interfaces/stateTypes';
 
-const postParam = (data: any) => {
+const postParam = (data: IAuth) => {
   return {
     method: 'POST',
     headers: {
@@ -11,7 +12,7 @@ const postParam = (data: any) => {
   }
 }
 
-export const signUp = async (data: any) => {
+export const signUp = async (data: IAuth) => {
   const res = await fetch(BASE_URL + ENDPOINTS.signUp, postParam(data))
   if (res.status >= 200 && res.status < 400) {
     return await res.json()
@@ -20,7 +21,7 @@ export const signUp = async (data: any) => {
   }
 }
 
-export const login = async (data: any) => {
+export const login = async (data: IAuth) => {
   const res = await fetch(BASE_URL + ENDPOINTS.login, postParam(data))
   if (res.status >= 200 && res.status < 400) {
     return await res.json()
@@ -29,7 +30,7 @@ export const login = async (data: any) => {
   }
 }
 
-export const refreshTokens = async (data: any, accessToken: string) => {
+export const refreshTokens = async (data: IRefreshToken, accessToken: string) => {
   const res = await fetch(BASE_URL + ENDPOINTS.refresh_token, {
     method: 'POST',
     headers: {
