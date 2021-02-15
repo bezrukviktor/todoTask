@@ -13,7 +13,7 @@ export interface INewItem {
 export interface IAccessToken {
   name: string
   exp: number
-  id: string
+  _id: string
   username: string
 }
 

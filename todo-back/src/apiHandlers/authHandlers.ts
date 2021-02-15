@@ -11,21 +11,19 @@ export const authVerify = async (ctx: Koa.Context, next: any) => {
   const token: string = ctx.header.authorization.split(' ')[1]
   try {
     jwt.verify(token, `${process.env.ACCESS_TOKEN_SECRET}`)
-    await next()
   } catch (err) {
     ctx.status = 401;
     ctx.body = {
       message: 'Something went wrong',
     }
   }
+  await next()
 }
 
 export const refreshToken = (collection: any) => {
   return async (ctx: Koa.Context) => {
     const refresh_token = ctx.request.body.refresh_token
     const userId: string = getUserId(ctx.header.authorization.split(' ')[1])
-    console.log(userId);
-    
     const user = await collection.findOne({ _id: new ObjectId(userId) })
     const { _id, username } = user
     if (user.refresh_token === refresh_token) {
@@ -33,7 +31,6 @@ export const refreshToken = (collection: any) => {
         expiresIn: 10,
       })
       const refresh_token = cryptoRandomString({ length: 20, type: 'base64' })
-
       await collection.findOneAndUpdate({
         _id
       }, {
@@ -82,14 +79,13 @@ export const login = (collection: any) => {
       const encriptPass: string = CryptoJS.AES.decrypt(user.pass, process.env.CRYPTO_SECRET_KEY!).toString(CryptoJS.enc.Utf8)
       const correctPass: boolean = inputEncriptPass === encriptPass;
       if (correctPass) {
-        const id = user._id
-        const { username } = user
-        const access_token = jwt.sign({ id, username }, process.env.ACCESS_TOKEN_SECRET!, {
+        const { _id, username } = user
+        const access_token = jwt.sign({ _id, username }, process.env.ACCESS_TOKEN_SECRET!, {
           expiresIn: 10,
         })
         const refresh_token = cryptoRandomString({ length: 20, type: 'base64' })
         await collection.findOneAndUpdate({
-          _id: id
+          _id
         }, {
           $set: {
             refresh_token
