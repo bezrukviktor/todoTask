@@ -1,5 +1,6 @@
 @charset "UTF-8";
 @import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+@import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 * {
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
@@ -30,6 +31,7 @@ button {
 .header {
   display: -webkit-box;
   display: -ms-flexbox;
+  position: relative;
   display: flex;
   -webkit-box-align: center;
       -ms-flex-align: center;
@@ -74,12 +76,7 @@ button {
   width: 100%;
 }
 
-.todo-header {
-  position: relative;
-  width: 100%;
-}
-
-.todo-header__input {
+.todo-body__input {
   width: 100%;
   padding: 16px 16px 16px 60px;
   border: none;
@@ -89,31 +86,31 @@ button {
           box-shadow: inset 0 -2px 1px rgba(0, 0, 0, 0.03);
 }
 
-.todo-header__input::-webkit-input-placeholder {
+.todo-body__input::-webkit-input-placeholder {
   font-style: italic;
   font-size: 22px;
   color: #cccccc;
 }
 
-.todo-header__input:-ms-input-placeholder {
+.todo-body__input:-ms-input-placeholder {
   font-style: italic;
   font-size: 22px;
   color: #cccccc;
 }
 
-.todo-header__input::-ms-input-placeholder {
+.todo-body__input::-ms-input-placeholder {
   font-style: italic;
   font-size: 22px;
   color: #cccccc;
 }
 
-.todo-header__input::placeholder {
+.todo-body__input::placeholder {
   font-style: italic;
   font-size: 22px;
   color: #cccccc;
 }
 
-.todo-header__input:focus {
+.todo-body__input:focus {
   outline: none;
 }
 
@@ -190,8 +187,8 @@ button {
 }
 
 .todo-footer {
+  display: flex;
   position: relative;
-  display: none;
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
@@ -233,22 +230,27 @@ button {
   gap: 10px;
 }
 
-.todo-filter__link {
+.todo-filter__mode {
   text-decoration: none;
   padding: 3px 7px;
   border: 1px solid transparent;
   border-radius: 3px;
   color: #777777;
+  cursor: pointer;
 }
 
-.todo-filter__link--active {
+.todo-filter__mode--active {
   border-color: rgba(175, 47, 47, 0.2);
 }
 
 .todo-clear-completed {
-  z-index: 2;
   visibility: hidden;
   border-bottom: 1px solid transparent;
+  z-index: 2;
+}
+
+.todo-clear-completed--show {
+  visibility: visible
 }
 
 .todo-clear-completed:hover {
@@ -264,13 +266,12 @@ button {
 }
 
 .checkAll {
-  display: none;
+  display: block;
   position: absolute;
   opacity: 0;
 }
 
-.checkAll + label {
-  visibility: hidden;
+.checkAllLabel {
   position: absolute;
   top: 24px;
   left: 0;
@@ -281,13 +282,21 @@ button {
   font-size: 0;
 }
 
-.checkAll + label::before {
+.visible {
+  display: flex;
+}
+
+.checkAllLabel::before {
   content: '❯';
   font-size: 22px;
   color: #e6e6e6;
 }
 
 .checkAll:checked + label::before {
+  color: #777777;
+}
+
+.all-completed {
   color: #777777;
 }
 
@@ -313,5 +322,101 @@ button {
 
 .remove:hover {
   cursor: pointer;
+}
+
+.loader-wrap {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.082);
+  text-align: center;
+  z-index: 10
+}
+
+.error-container {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.082);
+  z-index: 10;
+}
+
+.error-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 400px;
+  height: 200px;
+  padding: 30px 10px;
+  background-color: rgba(255, 255, 255, 0.74);
+  border-radius: 10px;
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px 0px;
+}
+
+.error {
+  text-align: center;
+  font-size: 30px;
+}
+
+.button {
+  background-color: royalblue;
+  color: #ffffff;
+  font-size: 20px;
+  letter-spacing: 1.2px;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 10px;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
+}
+
+.auth-btns {
+  position: absolute;
+  right: 0;
+}
+
+.btn {
+  padding: 10px 20px;
+  margin: 0 10px;
+  font-size: 12px;
+  letter-spacing: 1.5px;
+  border-radius: 5px;
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
+  cursor: pointer;
+}
+
+.signUp-btn {
+  background-color: #f5ba1a;
+  transition: .3s ease-in-out;
+  color: #ffffff;
+  font-weight: bold;
+}
+
+a {
+  text-decoration: none;
+}
+
+.signUp-btn:hover {
+  background-color:#ebb31b;
+}
+
+.logIn-btn {
+  transition: .3s ease-in-out;
+  color: #4d4d4d;
+}
+
+.logIn-btn:hover {
+  box-shadow: rgba(245, 186, 26, .3) 0px 0px 0px 1px;
 }
 /*# sourceMappingURL=style.css.map */
