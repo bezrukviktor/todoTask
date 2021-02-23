@@ -28,7 +28,7 @@ export const refreshToken = (collection: any) => {
     const { _id, username } = user
     if (user.refresh_token === refresh_token) {
       const access_token = jwt.sign({ _id, username }, process.env.ACCESS_TOKEN_SECRET!, {
-        expiresIn: 10,
+        expiresIn: 60*30,
       })
       const refresh_token = cryptoRandomString({ length: 20, type: 'base64' })
       await collection.findOneAndUpdate({
@@ -81,7 +81,7 @@ export const login = (collection: any) => {
       if (correctPass) {
         const { _id, username } = user
         const access_token = jwt.sign({ _id, username }, process.env.ACCESS_TOKEN_SECRET!, {
-          expiresIn: 10,
+          expiresIn: 60*30,
         })
         const refresh_token = cryptoRandomString({ length: 20, type: 'base64' })
         await collection.findOneAndUpdate({

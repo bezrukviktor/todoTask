@@ -2,12 +2,13 @@ import { ObjectId } from 'mongodb'
 import Koa from 'koa'
 import { ITodoItem, INewItem } from '../types/interfaces'
 import { getUserId } from '../_helpers/tokenHelper'
+import { getTodoList } from '../_helpers/todoListHelper'
 
 export const getList = (collection: any) => {
   return async (ctx: Koa.Context) => {
     const userId: string = getUserId(ctx.header.authorization.split(' ')[1])
-    const todoList: Array<ITodoItem> = await collection.find({ userId }).toArray();
-    ctx.body = { list: todoList }
+    const todoList: Array<ITodoItem> = await collection.find({ userId }).toArray()
+    ctx.body = { list: getTodoList(todoList) }
   }
 }
 
@@ -22,7 +23,7 @@ export const addItem = (collection: any) => {
     };
     await collection.insertOne(newItem);
     const todoList: Array<ITodoItem> = await collection.find({ userId }).toArray();
-    ctx.body = { list: todoList }
+    ctx.body = { list: getTodoList(todoList) }
   }
 }
 
@@ -34,7 +35,7 @@ export const removeItem = (collection: any) => {
       _id: id
     })
     const todoList: Array<ITodoItem> = await collection.find({ userId }).toArray();
-    ctx.body = { list: todoList }
+    ctx.body = { list: getTodoList(todoList) }
   }
 }
 
@@ -48,7 +49,7 @@ export const toggleAllItems = (collection: any) => {
       }
     })
     const todoList: Array<ITodoItem> = await collection.find({ userId }).toArray();
-    ctx.body = { list: todoList }
+    ctx.body = { list: getTodoList(todoList) }
   }
 }
 
@@ -65,7 +66,7 @@ export const toggleItem = (collection: any) => {
       }
     })
     const todoList: Array<ITodoItem> = await collection.find({ userId }).toArray();
-    ctx.body = { list: todoList }
+    ctx.body = { list: getTodoList(todoList) }
   }
 }
 
@@ -88,7 +89,7 @@ export const editItem = (collection: any) => {
       })
     }
     const todoList: Array<ITodoItem> = await collection.find({ userId }).toArray();
-    ctx.body = { list: todoList }
+    ctx.body = { list: getTodoList(todoList) }
   }
 }
 
@@ -99,6 +100,6 @@ export const removeCompletedItems = (collection: any) => {
       isActive: false
     })
     const todoList: Array<ITodoItem> = await collection.find({ userId }).toArray();
-    ctx.body = { list: todoList }
+    ctx.body = { list: getTodoList(todoList) }
   }
 }

@@ -35,6 +35,7 @@ const authReducer = (state = initialState, action: IAction) => {
       return {
         ...state,
         accessToken: '',
+        refreshToken: '',
         username: ''
       }
     default:

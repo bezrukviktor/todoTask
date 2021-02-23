@@ -3,7 +3,7 @@ import { composeWithDevTools } from 'redux-devtools-extension'
 import rootReducer from '../reducers/index'
 import logger from 'redux-logger'
 import { createEpicMiddleware } from 'redux-observable'
-import { rootEpic } from '../epics/authEpics'
+import { rootEpic } from '../epics/rootEpics'
 
 const epicMiddleware = createEpicMiddleware()
 const composeEnhancers = (window && (window as any).__REDUX_DEVTOOLS_EXTENSION__());

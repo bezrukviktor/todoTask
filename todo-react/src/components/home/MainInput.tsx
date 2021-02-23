@@ -19,7 +19,7 @@ const MainInput = () => {
   const isAllChecked: boolean = useMemo(() => todoList.every((item) => !item.isActive), [todoList])
 
   const onSelect = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const isActive: boolean = !e.target.checked;
+    const isActive: boolean = !e.target.checked
     dispatch(selectAllRequest(isActive))
   }, [dispatch])
 
